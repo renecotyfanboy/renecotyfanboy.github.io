@@ -8,21 +8,23 @@ Below are the publications for which my work was a central contribution. For an 
 ## Publication 
 
 <div class="publication-list">
+
+  <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2024A%26A...686A.133B/abstract">Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting. Demonstration of working principles down to the Poisson regime</a></strong><br>
+  D. Barret & S. Dupourqué<br>
+  <em>Astronomy & Astrophysics, vol. 686, 2024</em></p>
+
+  <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2024A%26A...687A..58D/abstract">CHEX-MATE: Turbulence in the intra-cluster medium from X-ray surface brightness fluctuations</a></strong><br>
+  S. Dupourqué, N. Clerc, E. Pointecouteau & al<br>
+  <em>Astronomy & Astrophysics, vol. 687, 2024</em></p>
+
+  <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2023A%26A...673A..91D/abstract">Investigating the turbulent hot gas in X-COP galaxy clusters</a></strong><br>
+  S. Dupourqué, N. Clerc, E. Pointecouteau, D. Eckert, S. Ettori & F. Vazza <br>
+  <em>Astronomy & Astrophysics, vol. 673, 2023</em></p>
+
   <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2021PhRvD.103h3016D/abstract">Constraints on the antistar fraction in the Solar System neighborhood from the 10-year Fermi Large Area Telescope gamma-ray source catalog</a></strong><br>
   S. Dupourqué, L. Tibaldo, P. von Ballmoos<br>
   <em>Phys. Rev. D, vol. 103, 2021</em></p>
   
-  <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2023A%26A...673A..91D/abstract">Investigating the turbulent hot gas in X-COP galaxy clusters</a></strong><br>
-  S. Dupourqué, N. Clerc, E. Pointecouteau, D. Eckert, S. Ettori & F. Vazza <br>
-  <em>Astronomy & Astrophysics, vol. 673, 2023</em></p>
-  
-  <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2024A%26A...687A..58D/abstract">CHEX-MATE: Turbulence in the intra-cluster medium from X-ray surface brightness fluctuations</a></strong><br>
-  S. Dupourqué, N. Clerc, E. Pointecouteau & al<br>
-  <em>Astronomy & Astrophysics, vol. 687, 2024</em></p>
-  
-  <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2024A%26A...686A.133B/abstract">Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting. Demonstration of working principles down to the Poisson regime</a></strong><br>
-  D. Barret & S. Dupourqué<br>
-  <em>Astronomy & Astrophysics, vol. 686, 2024</em></p>
 </div>
 
 ## Talks 

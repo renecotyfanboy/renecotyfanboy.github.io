@@ -63,7 +63,7 @@ permalink: /cv/
 
 <div class="teaching-list" style="font-size: 0.9em; line-height: 1.4;">
   <ul style="list-style-type: disc; padding-left: 20px;">
-    <li><strong>2020-2022 :</strong> Teaching assistant <em>Université Toulouse III</em></li>
+    <li><strong>2020-2022 :</strong> Teaching assistant, <em>Université Toulouse III</em></li>
     <li><strong>2018-2019 :</strong> Tutoring, <em>ISAE-Supaero, Toulouse</em></li>
   </ul>
 </div>
