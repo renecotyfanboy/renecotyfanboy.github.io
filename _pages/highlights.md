@@ -21,7 +21,7 @@ Here you will find some of the projects I've worked on. Click on the repository 
       <img src="{{ site.url }}{{ site.baseurl }}/assets/images/chainconsumer_logo.png" alt="ChainConsumer logo" class="project-image">
       <div>
         <h3><a href="https://github.com/Samreay/ChainConsumer">ChainConsumer</a></h3>
-        <p>I am a maintainer of ChainConsumer, which is a Python package that allows for the visualization and analysis of Markov Chain Monte Carlo (MCMC) chains. It provides a simple interface for generating publication-quality plots and statistical analysis, making it a valuable tool for researchers working with MCMC methods.</p>
+        <p>I am a maintainer of ChainConsumer, which is a Python package that allows for the visualization and analysis of Markov Chain Monte Carlo (MCMC) chains. </p>
       </div>
     </div>
   </div>
