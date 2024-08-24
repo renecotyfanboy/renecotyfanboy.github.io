@@ -1,8 +1,9 @@
 ---
-title: Curriculum vitae
-permalink: /cv/
+title: Academia
+permalink: /academia/
 ---
 
+Below are the publications for which my work was a central contribution. For an extensive list of my publications, you should check the [Nasa ADS](https://ui.adsabs.harvard.edu/search/fq=%7B!type%3Daqp%20v%3D%24fq_database%7D&fq_database=(database%3Aastronomy%20OR%20database%3Aphysics)&q=%20%20author%3A%22%5EDupourqu%C3%A9%22&sort=date%20desc%2C%20bibcode%20desc&p_=0)
 
 ## Publication 
 
@@ -35,39 +36,3 @@ permalink: /cv/
     <li><p><em>XMM-Newton survey legacy for Athena and beyond (2024)</em></p></li>
   </ul>
 </div>
-
-
-## Education
-
-<div class="education-list" style="font-size: 0.9em; line-height: 1.4;">
-  <ul style="list-style-type: disc; padding-left: 20px;">
-    <li><strong>2020-2023 :</strong> Ph.D in Astrophysics, <em>IRAP, Toulouse</em></li>
-    <li><strong>2018-2020 :</strong> Engineering Master Degree, <em>ISAE-Supaero, Toulouse</em></li>
-    <li><strong>2017-2020 :</strong> Master Degree in Astrophysics, <em>Université Toulouse III</em></li>
-    <li><strong>2015-2016 :</strong> Bachelor Degree in Physics, <em>Université Bordeaux I</em></li>
-    <li><strong>2013-2016 :</strong> CPGE PCSI/PC, <em>Lycée René Cassin, Bayonne</em></li>
-  </ul>
-</div>
-
-## Research internships
-
-<div class="experience-list" style="font-size: 0.9em; line-height: 1.4;">
-  <ul style="list-style-type: disc; padding-left: 20px;">
-    <li><strong>2019 :</strong> Antistar fraction in the solar neighborhood, <em>IRAP, Université Toulouse III</em></li>
-    <li><strong>2019 :</strong> Orbital transfer optimization between LLO & NRHO, <em>DCAS, ISAE-Supaero, Toulouse</em></li>
-    <li><strong>2016 :</strong> Similarity transformations & nucleon-nucleon interaction, <em>CENBG, Bordeaux</em></li>
-  </ul>
-</div>
-
-## Teaching 
-
-<div class="teaching-list" style="font-size: 0.9em; line-height: 1.4;">
-  <ul style="list-style-type: disc; padding-left: 20px;">
-    <li><strong>2020-2022 :</strong> Teaching assistant <em>Université Toulouse III</em></li>
-    <li><strong>2018-2019 :</strong> Tutoring, <em>ISAE-Supaero, Toulouse</em></li>
-  </ul>
-</div>
-
-## Awards
-
-- <strong>2023 :</strong> Pierre Maury award, <em>Académie des Sciences, Inscriptions & Belles Lettres, Toulouse</em>
