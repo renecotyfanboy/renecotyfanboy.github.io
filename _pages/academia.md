@@ -3,8 +3,7 @@ title: Academia
 permalink: /academia/
 ---
 
-Below are the publications for which my work was a central contribution. For an extensive list of my publications, you should check the [Nasa ADS](https://ui.adsabs.harvard.edu/search/fq=%7B!type%3Daqp%20v%3D%24fq_database%7D&fq_database=(database%3Aastronomy%20OR%20database%3Aphysics)&q=%20%20author%3A%22%5EDupourqu%C3%A9%22&sort=date%20desc%2C%20bibcode%20desc&p_=0)
-
+Below are the publications for which my work was a central contribution. For an extensive list of my publications, you should check the [Nasa ADS](https://ui.adsabs.harvard.edu/search/fq=%7B!type%3Daqp%20v%3D%24fq_database%7D&fq_database=(database%3Aastronomy%20OR%20database%3Aphysics)&q=%20%20author%3A%22Dupourqu%C3%A9%22&sort=date%20desc%2C%20bibcode%20desc&p_=0)
 ## Publication 
 
 <div class="publication-list">
