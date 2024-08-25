@@ -3,7 +3,7 @@ title: Highlights
 permalink: /highlights/
 ---
 
-Here you will find some of the projects I've worked on. Click on the repository links to explore the repositories.
+Here you will find some of the projects I've worked on. Click on the repository links to explore them.
 
 <div class="portfolio">
   <div class="project">
@@ -69,5 +69,6 @@ Here you will find some of the projects I've worked on. Click on the repository 
 
 .project p {
   margin-bottom: 0;
+  text-align: justify;
 }
 </style>
