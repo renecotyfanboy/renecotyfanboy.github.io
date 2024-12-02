@@ -4,9 +4,14 @@ permalink: /academia/
 ---
 
 Below are the publications for which my work was a central contribution. For an extensive list of my publications, you should check the [Nasa ADS](https://ui.adsabs.harvard.edu/search/fq=%7B!type%3Daqp%20v%3D%24fq_database%7D&fq_database=(database%3Aastronomy%20OR%20database%3Aphysics)&q=%20%20author%3A%22Dupourqu%C3%A9%22&sort=date%20desc%2C%20bibcode%20desc&p_=0)
+
 ## Publication 
 
 <div class="publication-list">
+
+  <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2024A%26A...690A.317D/abstract">jaxspec: A fast and robust Python library for X-ray spectral fitting</a></strong><br>
+  S. Dupourqué, D. Barret , C.M. Diez, S. Guillot, E. Quintin<br>
+  <em>Astronomy & Astrophysics, vol. 690, 2024</em></p>
 
   <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2024A%26A...686A.133B/abstract">Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting. Demonstration of working principles down to the Poisson regime</a></strong><br>
   D. Barret & S. Dupourqué<br>
@@ -35,5 +40,8 @@ Below are the publications for which my work was a central contribution. For an 
     <li><p><em><a href="https://ui.adsabs.harvard.edu/abs/2022icrc.confE.613D/abstract"> 37th International Cosmic Ray Conference. 12-23 July 2021. Berlin, Germany - Online, published March 18, 2022</a></em></p></li>
     <li><p><em><a href="https://zenodo.org/records/7331558"> Third Athena Scientific Conference 2022: Exploring the Hot and Energetic Universe</a></em></p></li>
     <li><p><em>XMM-Newton survey legacy for Athena and beyond (2024)</em></p></li>
-  </ul>
+    <li><p><em><a href="https://www.cosmos.esa.int/web/windsacrosstheuniverse"> Winds across the Universe (2024)</a></em></p></li>
+    <li><p><em><a href="https://github.com/JAXtronomy/October2024-Meeting">JAX in astronomy (2024)</a></em></p></li>
+    <li><p><em>Machine learning for astrochemistry (2024)</em></p></li>
+    <li><p><em><a href="https://deeplearning3d.sciencesconf.org/?lang=en"> deeplearning3d : Classification of hyperspectrales 3D data with machine-learning (2024)</a></em></p></li></ul>
 </div>
