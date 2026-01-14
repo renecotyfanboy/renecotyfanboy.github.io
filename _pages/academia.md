@@ -7,6 +7,17 @@ Below are the publications for which my work was a central contribution. For an 
 ## Publication 
 
 <div class="publication-list">
+  <p><strong><a href="https://scixplorer.org/abs/2025A%26A...703A..28D/abstract">First look at Vela X-1 with XRISM: A simultaneous campaign with XMM-Newton and NuSTAR</a></strong><br>
+  C. M. Diez, S. Dupourqué & al.<br>
+  <em>Astronomy & Astrophysics, vol. 703, 2025</em></p>
+
+  <p><strong><a href="https://scixplorer.org/abs/2025A%26A...699A.179D/abstract">Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting: II. High-resolution spectroscopy with Athena X-IFU</a></strong><br>
+  S. Dupourqué & D. Barret<br>
+  <em>Astronomy & Astrophysics, vol. 699, 2025</em></p>
+
+  <p><strong><a href="https://scixplorer.org/abs/2024A%26A...690A.317D/abstract">jaxspec: A fast and robust Python library for X-ray spectral fitting</a></strong><br>
+  S. Dupourqué, D. Barret, C. M. Diez, S. Guillot & E. Quintin<br>
+  <em>Astronomy & Astrophysics, vol. 690, 2024</em></p>
 
   <p><strong><a href="https://ui.adsabs.harvard.edu/abs/2024A%26A...686A.133B/abstract">Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting. Demonstration of working principles down to the Poisson regime</a></strong><br>
   D. Barret & S. Dupourqué<br>
