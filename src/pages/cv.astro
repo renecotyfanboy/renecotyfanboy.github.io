@@ -1,0 +1,165 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+
+type Entry = {
+  when: string;
+  what: string;
+  where?: string;
+  href?: string;
+  sub?: { when?: string; what: string; href?: string }[];
+};
+
+const sections: { title: string; entries: Entry[] }[] = [
+  {
+    title: "Education",
+    entries: [
+      { when: "2020–2023", what: "Ph.D in Astrophysics", where: "IRAP, Toulouse" },
+      {
+        when: "2018–2020",
+        what: "Engineering Master Degree",
+        where: "ISAE-Supaero, Toulouse",
+      },
+      {
+        when: "2017–2020",
+        what: "Master Degree in Astrophysics",
+        where: "Université Toulouse III",
+      },
+      {
+        when: "2015–2016",
+        what: "Bachelor Degree in Physics",
+        where: "Université Bordeaux I",
+      },
+      { when: "2013–2016", what: "CPGE PCSI/PC", where: "Lycée René Cassin, Bayonne" },
+    ],
+  },
+];
+---
+
+<PageLayout
+  title="Curriculum Vitae"
+  description="Curriculum vitae"
+>
+  {
+    sections.map((section) => (
+      <section class="sec">
+        <h2 class="title-rule">{section.title}</h2>
+        <ol class="entries">
+          {section.entries.map((e) => (
+            <li>
+              <span class="when meta">{e.when}</span>
+              <div class="what">
+                <p class="line">
+                  {e.href ? (
+                    <a href={e.href} rel="noopener">
+                      {e.what}
+                    </a>
+                  ) : (
+                    e.what
+                  )}
+                  {e.where && <span class="where">{e.where}</span>}
+                </p>
+                {e.sub && (
+                  <ul class="sub">
+                    {e.sub.map((s) => (
+                      <li>
+                        {s.when && <span class="meta sub-when">{s.when}</span>}
+                        {s.href ? (
+                          <a href={s.href} rel="noopener">
+                            {s.what}
+                          </a>
+                        ) : (
+                          s.what
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))
+  }
+</PageLayout>
+
+<style>
+  .sec + .sec {
+    margin-block-start: 3.5rem;
+  }
+
+  /* Underline comes from `.title-rule` in global.css. */
+  h2 {
+    font-size: var(--step-2);
+  }
+
+  .entries {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+
+  .entries > li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1.25rem;
+    padding-block: 0.85rem;
+    border-block-start: 1px solid var(--line-soft);
+  }
+
+  .entries > li:first-child {
+    border-block-start: 0;
+  }
+
+  .when {
+    padding-block-start: 0.32rem;
+    color: var(--gold);
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+
+  .line {
+    color: var(--fog-100);
+    line-height: 1.5;
+  }
+
+  .where {
+    display: block;
+    margin-block-start: 0.15rem;
+    color: var(--fog-400);
+    font-size: var(--step--1);
+    font-style: italic;
+  }
+
+  .sub {
+    margin: 0.7rem 0 0;
+    padding: 0 0 0 1rem;
+    list-style: none;
+    border-inline-start: 1px solid var(--line);
+  }
+
+  .sub li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: baseline;
+    padding-block: 0.22rem;
+    font-size: var(--step--1);
+    color: var(--fog-300);
+  }
+
+  .sub-when {
+    color: var(--fog-500);
+    font-size: 0.65rem;
+  }
+
+  @media (max-width: 30rem) {
+    .entries > li {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+    .when {
+      padding-block-start: 0;
+    }
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+/* There is deliberately no `.prose` grid here: that breakout grid exists for
+   generated article bodies, which only PostLayout renders. */
+interface Props {
+  title: string;
+  lede?: string;
+  description?: string;
+}
+
+const { title, lede, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <header class="page-head">
+    <div class="measure">
+      <h1>{title}</h1>
+      <div class="rule rule--soft head-rule" aria-hidden="true"></div>
+      {lede && <p class="lede">{lede}</p>}
+    </div>
+  </header>
+
+  <div class="page-body measure">
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: clamp(3rem, 8vw, 5.5rem) 0;
+  }
+
+  .page-head h1 {
+    font-size: var(--step-4);
+  }
+
+  .head-rule {
+    margin-block-start: 1.4rem;
+  }
+
+  .lede {
+    margin-block-start: 1.4rem;
+    max-width: 60ch;
+    font-size: var(--step-1);
+    color: var(--fog-400);
+    line-height: 1.65;
+  }
+
+  .page-body {
+    padding-block: 2.5rem 5.5rem;
+  }
+</style>

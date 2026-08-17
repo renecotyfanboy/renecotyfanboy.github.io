@@ -1,0 +1,46 @@
+---
+/* Spectrum-coloured scroll indicator pinned under the header. */
+---
+
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>(".progress > span");
+  const article = document.querySelector<HTMLElement>("article");
+
+  if (bar && article) {
+    const update = () => {
+      /* Not offsetTop: the article's offsetParent is `.shell`, which is
+         positioned, so offsetTop reports 0 rather than the document offset. */
+      const start = article.getBoundingClientRect().top + window.scrollY;
+      const span = article.offsetHeight - window.innerHeight;
+      const p = span <= 0 ? 1 : (window.scrollY - start) / span;
+      bar.style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
+    };
+
+    update();
+    addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update, { passive: true });
+  }
+</script>
+
+<style>
+  .progress {
+    position: sticky;
+    /* Measured, not assumed — a hardcoded 4rem put the bar behind the
+       two-row header on phones, where it is 97px tall. */
+    top: var(--header-h);
+    z-index: 49;
+    height: 2px;
+    margin-block-end: -2px;
+  }
+
+  .progress > span {
+    display: block;
+    height: 100%;
+    background: var(--spectrum);
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
+  }
+</style>

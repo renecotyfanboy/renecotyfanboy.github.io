@@ -1,0 +1,7 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  // `exclude` replaces the base list rather than extending it, so `dist` has to
+  // be repeated here; `include`, which we do not override, comes from the base.
+  // public/charts holds the generated xy bundle — build output, not source.
+  "exclude": ["dist", "notebooks", "public/charts"]
+}

@@ -1,0 +1,28 @@
+# Environment used to execute the notebooks at build time.
+# Kept separate from any research env so the site build stays reproducible.
+#
+# scripts/build_blackhole.py is deliberately absent from this list: it is a
+# one-shot generator whose outputs are committed, and it needs Pillow on top of
+# what is here. Install that separately if you ever regenerate the hero assets.
+
+# Pipeline: jupytext (read MyST) -> nbclient (execute) -> nbconvert (markdown)
+jupytext>=1.16
+nbclient>=0.10
+nbconvert>=7.16
+nbformat>=5.10
+ipykernel>=6.29      # provides the python3 kernelspec; not imported directly
+traitlets>=5.1       # scripts/build_notebooks.py builds the nbconvert Config
+ipython>=8           # notebooks/xysite.py emits output via IPython.display
+pyyaml>=6.0
+
+numpy>=2.0
+scipy>=1.14
+pandas>=2.2
+tabulate>=0.9        # DataFrame.to_markdown
+
+# Pinned exactly, unlike the rest: xy is pre-1.0, and notebooks/xysite.py now
+# parses its exported HTML to hoist the engine out. A minor release may change
+# both the chart API and that output, and the weekly cron would hit it with no
+# commit to blame. Bump deliberately, then re-run the notebooks and eyeball the
+# charts.
+xy==0.0.6

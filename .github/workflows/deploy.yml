@@ -1,0 +1,132 @@
+# Execute the notebooks, build the Astro site, deploy to GitHub Pages.
+name: Deploy site to Pages
+
+on:
+  push:
+    branches: ["master"]
+  # The same build on a proposed change, minus the deploy. Without this,
+  # pushing to master is the only way to learn whether the site still builds —
+  # and that push publishes.
+  pull_request:
+  schedule:
+    - cron: "0 4 * * 1" # weekly (Mon 04:00 UTC): refresh SciX citation counts
+  workflow_dispatch:
+
+# Permissions are granted per job rather than here: `build` runs third-party
+# code (a pip tree and 395 npm packages) and has no business holding a Pages
+# write token.
+
+# One run per ref. A superseded pull-request build is cancelled; a deploy in
+# flight on master never is.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Kept out of the deploy path: `astro check` is the one thing that needs the
+  # devDependencies, and pulling them into `build` would put the whole
+  # language-server tree back into every deployment.
+  check:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Runs against the committed src/content/posts, so it needs neither
+      # Python nor the notebook pipeline.
+      - name: Typecheck
+        run: npm run check
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      TZ: Europe/Paris
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: notebooks/requirements.lock
+
+      # The lock, not requirements.txt: the weekly cron re-executes the
+      # notebooks, so a floating dependency could change published numbers with
+      # no commit to blame.
+      - name: Install notebook dependencies
+        run: pip install -r notebooks/requirements.lock
+
+      - name: Refresh publications from SciX
+        env:
+          SCIX_TOKEN: ${{ secrets.SCIX_TOKEN }}
+        # The script exits 0 and keeps the committed JSON whenever SciX is
+        # missing a token, unreachable, or returns nothing — so an outage there
+        # cannot block publishing an article.
+        run: python3 scripts/fetch_publications.py
+
+      - name: Execute notebooks
+        run: python3 scripts/build_notebooks.py
+
+      - name: Install site dependencies
+        # `astro build` needs no devDependency; skipping them drops ~68 MB and
+        # the whole language-server subtree from every deploy and weekly cron.
+        run: npm ci --omit=dev
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload artifact
+        # Nothing downstream consumes it on a pull request, and it is ~2.5 MB.
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+
+  # No `actions/configure-pages` step anywhere: its outputs (base_url,
+  # base_path) are unused — astro.config.mjs hardcodes `site` and sets no
+  # `base` — and with `enablement: false` it only reads settings the repository
+  # already has (Pages source is already "GitHub Actions", custom domain
+  # sdupourque.me). Keeping it would force a Pages scope onto `build`.
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    # Nothing to publish from a pull request; the build above is the check.
+    if: github.event_name != 'pull_request'
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to prove the deployment comes from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

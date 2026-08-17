@@ -1,0 +1,47 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getPosts, getTags, tagSlug, type Post } from "../../utils/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const tags = await getTags();
+
+  return tags.map(({ tag, slug }) => ({
+    params: { tag: slug },
+    props: {
+      label: tag,
+      posts: posts.filter((p) => p.data.tags.some((t) => tagSlug(t) === slug)),
+    },
+  }));
+}
+
+interface Props {
+  label: string;
+  posts: Post[];
+}
+
+const { label, posts } = Astro.props;
+---
+
+<PageLayout
+  title={`#${label}`}
+  description={`Posts tagged ${label}.`}
+>
+  {posts.map((post, i) => <PostCard post={post} index={posts.length - i} />)}
+  <p class="back">
+    <a href="/blog">← All posts</a>
+  </p>
+</PageLayout>
+
+<style>
+  .back {
+    margin-block-start: 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .back a {
+    text-decoration: none;
+  }
+</style>

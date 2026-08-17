@@ -1,0 +1,15 @@
+---
+/* KaTeX's stylesheet, inlined only into posts that actually set maths.
+
+   It is imported with Vite's `?inline` so it stays out of the page's CSS
+   bundle: an ordinary `import` would land in the shared article stylesheet
+   that every post links, whatever this component renders. Vite still rewrites
+   the `url()`s and emits the fonts, so the faces resolve normally.
+
+   The trade: a maths post carries ~8 kB gzip more than it did and can no
+   longer share a cached sheet with its neighbours, while a post without maths
+   saves the same amount. Worth revisiting if most posts end up setting maths. */
+import katexCss from "katex/dist/katex.min.css?inline";
+---
+
+<style is:global set:html={katexCss}></style>

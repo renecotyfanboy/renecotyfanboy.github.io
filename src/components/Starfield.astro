@@ -1,0 +1,26 @@
+---
+/* Site-wide procedural starfield. Purely decorative: it renders nothing
+   until JS runs, and it is fixed to the viewport rather than to the page, so
+   scrolling never repaints it. */
+---
+
+<canvas class="starfield" aria-hidden="true"></canvas>
+
+<script>
+  import { initStarfield } from "../scripts/starfield.js";
+  initStarfield(document.querySelector(".starfield"));
+</script>
+
+<style>
+  /* Behind every stacking context on the page but still above the body
+     background, which the root propagates to the viewport canvas. The sticky
+     header (z-index 50) and all page content therefore sit on top. */
+  .starfield {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>

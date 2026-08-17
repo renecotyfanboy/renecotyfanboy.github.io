@@ -1,0 +1,173 @@
+{
+  "stats": {
+    "total": 271,
+    "h_index": 8,
+    "count": 13,
+    "preprints": 3
+  },
+  "items": [
+    {
+      "title": "Diagnosing the Fe line complex of the intracluster medium by XRISM high-resolution spectroscopy",
+      "authors": "K. Fukushima, L. Hirata, N. Y. Yamasaki, et al.",
+      "venue": "arXiv",
+      "volume": "2608.08094",
+      "page": "",
+      "year": "2026",
+      "citations": 0,
+      "url": "https://scixplorer.org/abs/2026arXiv260808094F/abstract",
+      "preprint": true
+    },
+    {
+      "title": "Planck Constraints on Turbulence in the Coma Cluster",
+      "authors": "B. Sigal, E. Pointecouteau, N. Clerc, et al.",
+      "venue": "arXiv",
+      "volume": "2607.29414",
+      "page": "",
+      "year": "2026",
+      "citations": 0,
+      "url": "https://scixplorer.org/abs/2026arXiv260729414S/abstract",
+      "preprint": true
+    },
+    {
+      "title": "XRISM Reveals a Kinematically Coherent Core System of the Nearby Cool-Core Cluster Abell 2199",
+      "authors": "K. Suda, K. Matsushita, K. Sato, et al.",
+      "venue": "arXiv",
+      "volume": "2607.06977",
+      "page": "",
+      "year": "2026",
+      "citations": 1,
+      "url": "https://scixplorer.org/abs/2026arXiv260706977S/abstract",
+      "preprint": true
+    },
+    {
+      "title": "Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting: III. Deriving exact posteriors with dimension reduction and importance sampling",
+      "authors": "D. Barret, S. Dupourqué",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "708",
+      "page": "A280",
+      "year": "2026",
+      "citations": 0,
+      "url": "https://scixplorer.org/abs/2026A%26A...708A.280B/abstract"
+    },
+    {
+      "title": "CHEX-MATE: Towards a consistent universal pressure profile and cluster mass reconstruction",
+      "authors": "M. Muñoz-Echeverría, E. Pointecouteau, G. W. Pratt, et al.",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "704",
+      "page": "A302",
+      "year": "2025",
+      "citations": 3,
+      "url": "https://scixplorer.org/abs/2025A%26A...704A.302M/abstract"
+    },
+    {
+      "title": "First look at Vela X-1 with XRISM: A simultaneous campaign with XMM-Newton and NuSTAR",
+      "authors": "C. M. Diez, S. Dupourqué, M. Zhou, et al.",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "703",
+      "page": "A28",
+      "year": "2025",
+      "citations": 8,
+      "url": "https://scixplorer.org/abs/2025A%26A...703A..28D/abstract"
+    },
+    {
+      "title": "Toward mapping turbulence in the intracluster medium: IV. Using NewAthena/X-IFU and simulation-based inference to constrain turbulence",
+      "authors": "A. Molin, S. Dupourqué, N. Clerc, E. Pointecouteau, F. Pajot, E. Cucchetti",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "702",
+      "page": "A215",
+      "year": "2025",
+      "citations": 2,
+      "url": "https://scixplorer.org/abs/2025A%26A...702A.215M/abstract"
+    },
+    {
+      "title": "Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting: II. High-resolution spectroscopy with Athena X-IFU",
+      "authors": "S. Dupourqué, D. Barret",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "699",
+      "page": "A179",
+      "year": "2025",
+      "citations": 7,
+      "url": "https://scixplorer.org/abs/2025A%26A...699A.179D/abstract"
+    },
+    {
+      "title": "The X-ray Integral Field Unit at the end of the Athena reformulation phase",
+      "authors": "P. Peille, D. Barret, E. Cucchetti, et al.",
+      "venue": "Experimental Astronomy",
+      "volume": "59",
+      "page": "18",
+      "year": "2025",
+      "citations": 27,
+      "url": "https://scixplorer.org/abs/2025ExA....59...18P/abstract"
+    },
+    {
+      "title": "PITSZI: Probing intra-cluster medium turbulence with Sunyaev–Zel'dovich imaging: Application to the triple merging cluster MACS J0717.5+3745",
+      "authors": "R. Adam, T. Eynard-Machet, I. Bartalucci, et al.",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "694",
+      "page": "A182",
+      "year": "2025",
+      "citations": 7,
+      "url": "https://scixplorer.org/abs/2025A%26A...694A.182A/abstract"
+    },
+    {
+      "title": "jaxspec: A fast and robust Python library for X-ray spectral fitting",
+      "authors": "S. Dupourqué, D. Barret, C. M. Diez, S. Guillot, E. Quintin",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "690",
+      "page": "A317",
+      "year": "2024",
+      "citations": 10,
+      "url": "https://scixplorer.org/abs/2024A%26A...690A.317D/abstract"
+    },
+    {
+      "title": "CHEX-MATE: Turbulence in the intra-cluster medium from X-ray surface brightness fluctuations",
+      "authors": "S. Dupourqué, N. Clerc, E. Pointecouteau, et al.",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "687",
+      "page": "A58",
+      "year": "2024",
+      "citations": 20,
+      "url": "https://scixplorer.org/abs/2024A%26A...687A..58D/abstract"
+    },
+    {
+      "title": "Simulation-based inference with neural posterior estimation applied to X-ray spectral fitting. Demonstration of working principles down to the Poisson regime",
+      "authors": "D. Barret, S. Dupourqué",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "686",
+      "page": "A133",
+      "year": "2024",
+      "citations": 15,
+      "url": "https://scixplorer.org/abs/2024A%26A...686A.133B/abstract"
+    },
+    {
+      "title": "Investigating the turbulent hot gas in X-COP galaxy clusters",
+      "authors": "S. Dupourqué, N. Clerc, E. Pointecouteau, D. Eckert, S. Ettori, F. Vazza",
+      "venue": "Astronomy & Astrophysics",
+      "volume": "673",
+      "page": "A91",
+      "year": "2023",
+      "citations": 21,
+      "url": "https://scixplorer.org/abs/2023A%26A...673A..91D/abstract"
+    },
+    {
+      "title": "The Athena X-ray Integral Field Unit: a consolidated design for the system requirement review of the preliminary definition phase",
+      "authors": "D. Barret, V. Albouys, J. D. Herder, et al.",
+      "venue": "Experimental Astronomy",
+      "volume": "55",
+      "page": "373",
+      "year": "2023",
+      "citations": 131,
+      "url": "https://scixplorer.org/abs/2023ExA....55..373B/abstract"
+    },
+    {
+      "title": "Constraints on the antistar fraction in the Solar System neighborhood from the 10-year Fermi Large Area Telescope gamma-ray source catalog",
+      "authors": "S. Dupourqué, L. Tibaldo, P. von Ballmoos",
+      "venue": "Physical Review D",
+      "volume": "103",
+      "page": "083016",
+      "year": "2021",
+      "citations": 20,
+      "url": "https://scixplorer.org/abs/2021PhRvD.103h3016D/abstract"
+    }
+  ]
+}

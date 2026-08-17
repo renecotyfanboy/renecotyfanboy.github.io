@@ -1,0 +1,142 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+/* h2/h3 only — deeper levels turn the rail into noise. */
+const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length > 2 && (
+    <nav class="toc" aria-label="Table of contents">
+      <p class="meta toc-title">Contents</p>
+      <ul>
+        {items.map((h) => (
+          <li class:list={[`d${h.depth}`]}>
+            <a href={`#${h.slug}`} data-toc={h.slug}>
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc]");
+  if (links.length) {
+    const byId = new Map(
+      [...links].map((a) => [a.dataset.toc as string, a]),
+    );
+    let current: HTMLAnchorElement | null = null;
+
+    const setActive = (a: HTMLAnchorElement | null) => {
+      if (a === current) return;
+      current?.classList.remove("active");
+      a?.classList.add("active");
+      current = a;
+    };
+
+    const targets = [...byId.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    // Track the last heading whose top has passed the reading line (~28% down
+    // the viewport), which matches where the eye actually is.
+    const observer = new IntersectionObserver(
+      () => {
+        const line = window.innerHeight * 0.28;
+        let active: HTMLElement | null = null;
+        for (const el of targets) {
+          if (el.getBoundingClientRect().top <= line) active = el;
+        }
+        setActive(active ? (byId.get(active.id) ?? null) : null);
+      },
+      { rootMargin: "0px 0px -72% 0px", threshold: [0, 1] },
+    );
+    targets.forEach((el) => observer.observe(el));
+  }
+</script>
+
+<style>
+  .toc {
+    display: none;
+  }
+
+  /* Only worth showing once there is real margin to put it in. */
+  @media (min-width: 84rem) {
+    .toc {
+      display: block;
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+      max-height: calc(100svh - var(--header-h) - 5rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-inline-end: 1rem;
+    }
+
+    .toc::-webkit-scrollbar {
+      width: 3px;
+    }
+    .toc::-webkit-scrollbar-thumb {
+      background: var(--line);
+    }
+  }
+
+  .toc-title {
+    margin-block-end: 0.85rem;
+    color: var(--fog-500);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-inline-start: 1px solid var(--line-soft);
+  }
+
+  li.d3 a {
+    padding-inline-start: 1.6rem;
+    font-size: 0.72rem;
+    color: var(--fog-500);
+  }
+
+  a {
+    position: relative;
+    display: block;
+    padding: 0.3rem 0 0.3rem 0.85rem;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: var(--fog-400);
+    text-decoration: none;
+    transition: color 0.16s var(--ease);
+  }
+
+  a::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    width: 2px;
+    background: var(--spectrum);
+    opacity: 0;
+    transition: opacity 0.18s var(--ease);
+  }
+
+  a:hover {
+    color: var(--fog-100);
+  }
+
+  a.active {
+    color: var(--gold);
+  }
+
+  a.active::before {
+    opacity: 1;
+  }
+</style>

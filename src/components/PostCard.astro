@@ -1,0 +1,126 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+import { formatDate } from "../utils/format";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+  index?: number;
+}
+
+const { post, index } = Astro.props;
+const { title, description, date, tags, source, draft } = post.data;
+---
+
+<article class="card">
+  {index !== undefined && <span class="idx meta">{String(index).padStart(2, "0")}</span>}
+
+  <div class="body">
+    <p class="meta line">
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      {source === "notebook" && <span class="chip">notebook</span>}
+      {draft && <span class="chip chip--draft">draft</span>}
+      {tags.length > 0 && <span class="tags">{tags.join(" · ")}</span>}
+    </p>
+
+    <h3 class="title">
+      <a href={`/blog/${post.id}`}>
+        {title}
+        {/* Wrapped in a span: Astro scoped styles don't reach a class passed
+            as a prop into a child component. */}
+        <span class="go"><Icon name="arrow" size={16} class="i-inline" /></span>
+      </a>
+    </h3>
+
+    {description && <p class="desc">{description}</p>}
+  </div>
+</article>
+
+<style>
+  .card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+    padding-block: 1.6rem;
+    border-block-start: 1px solid var(--line-soft);
+    transition: border-color 0.2s var(--ease);
+  }
+
+  .card:hover {
+    border-block-start-color: color-mix(in oklab, var(--gold) 40%, var(--line));
+  }
+
+  .idx {
+    padding-block-start: 0.45rem;
+    color: var(--fog-500);
+    font-size: 0.68rem;
+    transition: color 0.2s var(--ease);
+  }
+
+  .card:hover .idx {
+    color: var(--gold);
+  }
+
+  .line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-block-end: 0.45rem;
+  }
+
+  /* `.chip` and `.chip--draft` live in global.css; cards run a touch tighter. */
+  .chip {
+    letter-spacing: 0.12em;
+  }
+
+  .tags {
+    color: var(--fog-500);
+  }
+
+  .title {
+    font-size: var(--step-2);
+    line-height: 1.2;
+  }
+
+  .title a {
+    color: var(--fog-100);
+    text-decoration: none;
+    display: inline;
+  }
+
+  .title a:hover {
+    color: var(--gold);
+  }
+
+  .go {
+    display: inline-block;
+    margin-inline-start: 0.3em;
+    opacity: 0;
+    transform: translateX(-0.35rem);
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+
+  .card:hover .go {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .desc {
+    margin-block-start: 0.5rem;
+    max-width: 62ch;
+    color: var(--fog-400);
+    font-size: var(--step--1);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 30rem) {
+    .card {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+    .idx {
+      padding-block-start: 0;
+    }
+  }
+</style>

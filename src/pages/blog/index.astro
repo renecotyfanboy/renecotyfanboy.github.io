@@ -1,0 +1,56 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getPosts, getTags } from "../../utils/posts";
+
+const posts = await getPosts();
+const tags = await getTags();
+---
+
+<PageLayout
+  title="Blog"
+  lede="Random posts about God knows what. Don't expect much from what you read. I do all sorts of things."
+  description="Blog posts."
+>
+  {
+    tags.length > 0 && (
+      <p class="meta taglist">
+        {tags.map(({ tag, slug, count }) => (
+          <a href={`/tags/${slug}`}>
+            #{tag} <span class="count">{count}</span>
+          </a>
+        ))}
+      </p>
+    )
+  }
+
+  {
+    posts.length === 0 ? (
+      <p class="empty">
+        Nothing published yet — the first posts are being written.
+      </p>
+    ) : (
+      posts.map((post, i) => <PostCard post={post} index={posts.length - i} />)
+    )
+  }
+</PageLayout>
+
+<style>
+  .taglist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-block-end: 2.5rem;
+  }
+
+  .count {
+    color: var(--fog-500);
+    opacity: 0.7;
+  }
+
+  .empty {
+    padding-block: 2rem;
+    color: var(--fog-500);
+    font-style: italic;
+  }
+</style>

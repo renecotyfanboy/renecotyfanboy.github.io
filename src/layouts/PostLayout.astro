@@ -1,0 +1,227 @@
+---
+import type { MarkdownHeading } from "astro";
+import BaseLayout from "./BaseLayout.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import ReadingProgress from "../components/ReadingProgress.astro";
+import NotebookBanner from "../components/NotebookBanner.astro";
+import Icon from "../components/Icon.astro";
+import KatexStyles from "../components/KatexStyles.astro";
+import { formatDate, readingTime } from "../utils/format";
+import { tagSlug, type Post } from "../utils/posts";
+
+interface Props {
+  post: Post;
+  headings: MarkdownHeading[];
+  prev?: Post;
+  next?: Post;
+}
+
+const { post, headings, prev, next } = Astro.props;
+const { title, description, date, tags, source, notebook, draft } = post.data;
+
+const minutes = readingTime(post.body);
+
+/* Approximates what remark-math picks up ($$…$$ and $…$), so the KaTeX
+   stylesheet is only pulled in for posts that actually set maths. Erring wide
+   is harmless — a false positive just loads the sheet as before. */
+const hasMath = /\$\$[\s\S]*?\$\$|\$(?![\s$])[^$\n]*(?<![\s$])\$/.test(post.body ?? "");
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  publishedTime={date}
+>
+  {hasMath && <KatexStyles />}
+  <ReadingProgress />
+
+  <div class="shell">
+    <aside class="toc-rail">
+      <TableOfContents headings={headings} />
+    </aside>
+
+    <article>
+      <header class="post-head">
+        <div class="measure">
+          <p class="meta line">
+            <time datetime={date.toISOString()}>{formatDate(date)}</time>
+            <span>{minutes} min read</span>
+            {source === "notebook" && <span class="chip">notebook</span>}
+            {/* Only ever visible in dev: drafts are filtered out of prod. */}
+            {draft && <span class="chip chip--draft">draft</span>}
+          </p>
+
+          <h1>{title}</h1>
+
+          {description && <p class="lede">{description}</p>}
+
+          <div class="rule rule--soft" aria-hidden="true"></div>
+
+          {
+            tags.length > 0 && (
+              <p class="meta tags">
+                {tags.map((t) => (
+                  <a href={`/tags/${tagSlug(t)}`}>#{t}</a>
+                ))}
+              </p>
+            )
+          }
+
+          {source === "notebook" && <NotebookBanner notebook={notebook} />}
+        </div>
+      </header>
+
+      <div class="prose post-body">
+        <slot />
+      </div>
+    </article>
+  </div>
+
+  {
+    (prev || next) && (
+      <nav class="pager measure" aria-label="More posts">
+        <div class="rule rule--soft" aria-hidden="true" />
+        <div class="pager-grid">
+          {next ? (
+            <a class="pager-link prev" href={`/blog/${next.id}`}>
+              <span class="meta">
+                <Icon name="arrow" size={13} class="i-inline i-flip" /> Newer
+              </span>
+              <span class="pager-title">{next.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {prev && (
+            <a class="pager-link next" href={`/blog/${prev.id}`}>
+              <span class="meta">
+                Older <Icon name="arrow" size={13} />
+              </span>
+              <span class="pager-title">{prev.data.title}</span>
+            </a>
+          )}
+        </div>
+      </nav>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .shell {
+    position: relative;
+  }
+
+  .toc-rail {
+    display: none;
+  }
+
+  /* The rail sits in the left margin, pinned to the article's own edges rather
+     than a hardcoded offset. `--col` repeats the width `.measure` resolves to;
+     `--bleed` is how far figures and charts break out past it. Clearing both
+     is what keeps a wide chart off the rail. */
+  @media (min-width: 84rem) {
+    .toc-rail {
+      --col: min(var(--measure), 100% - (2 * var(--gutter)));
+
+      display: block;
+      position: absolute;
+      inset-block: 0;
+      right: calc(50% + (var(--col) / 2) + var(--bleed) + 2rem);
+      width: 12rem;
+    }
+  }
+
+  .post-head {
+    padding-block: clamp(2.5rem, 7vw, 4.5rem) 0;
+  }
+
+  .line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .post-head h1 {
+    margin-block-start: 0.75rem;
+    font-size: var(--step-4);
+  }
+
+  .lede {
+    margin-block-start: 1.1rem;
+    font-size: var(--step-1);
+    line-height: 1.6;
+    color: var(--fog-400);
+    text-wrap: pretty;
+  }
+
+  .rule--soft {
+    margin-block-start: 1.75rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-block-start: 1rem;
+  }
+
+  .post-body {
+    padding-block-start: 2.5rem;
+  }
+
+  /* ---- pager ---- */
+
+  .pager {
+    padding-block: 3rem 5rem;
+  }
+
+  .pager-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-block-start: 2rem;
+  }
+
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    text-decoration: none;
+    color: var(--fog-300);
+  }
+
+  .pager-link.next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .pager-link .meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .pager-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.25;
+    color: var(--fog-200);
+    transition: color 0.16s var(--ease);
+  }
+
+  .pager-link:hover .pager-title {
+    color: var(--gold);
+  }
+
+  @media (max-width: 34rem) {
+    .pager-grid {
+      grid-template-columns: 1fr;
+    }
+    .pager-link.next {
+      text-align: left;
+      align-items: flex-start;
+    }
+  }
+</style>

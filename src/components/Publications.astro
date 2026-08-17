@@ -1,0 +1,193 @@
+---
+import publications from "../data/publications.json";
+import { SCIX_SEARCH } from "../consts";
+
+const ME = "S. Dupourqué";
+const { stats, items } = publications as {
+  stats?: { total: number; h_index: number; count: number; preprints?: number };
+  items: {
+    title: string;
+    authors: string;
+    venue: string;
+    volume?: string;
+    page?: string;
+    year?: string;
+    citations?: number;
+    url: string;
+    preprint?: boolean;
+  }[];
+};
+
+/* Split the author string around my name so it can be emphasised without
+   injecting raw HTML from the API payload. */
+const splitAuthors = (authors: string) => authors.split(ME);
+---
+
+{
+  stats && (
+    <p class="stats">
+      <strong>{stats.total}</strong> citations · h-index{" "}
+      <strong>{stats.h_index}</strong> · {stats.count} articles
+      {!!stats.preprints && ` · ${stats.preprints} preprints`} ·{" "}
+      <a href={SCIX_SEARCH} rel="noopener">
+        via SciX
+      </a>
+    </p>
+  )
+}
+
+<ol class="pubs">
+  {
+    items.map((p) => {
+      const parts = splitAuthors(p.authors);
+      return (
+        <li>
+          <p class="title">
+            <a href={p.url} rel="noopener">
+              {p.title}
+            </a>
+          </p>
+          <p class="authors">
+            {parts.map((part, i) => (
+              <>
+                {i > 0 && <strong>{ME}</strong>}
+                {part}
+              </>
+            ))}
+          </p>
+          <p class="meta-line">
+            <span class:list={["badge", p.preprint ? "preprint" : "published"]}>
+              {p.preprint ? "preprint" : "published"}
+            </span>
+            <em>{p.venue}</em>
+            {p.volume && ` ${p.volume}`}
+            {p.page && `, ${p.page}`}
+            {p.year && ` (${p.year})`}
+            {!!p.citations && p.citations > 0 && (
+              <span class="cites">
+                {" · "}
+                {p.citations} citation{p.citations === 1 ? "" : "s"}
+              </span>
+            )}
+          </p>
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .stats {
+    margin-block-end: 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--fog-400);
+  }
+
+  .stats strong {
+    color: var(--gold);
+  }
+
+  .pubs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: pub;
+  }
+
+  .pubs li {
+    position: relative;
+    padding: 1.25rem 0 1.25rem 3rem;
+    border-block-start: 1px solid var(--line-soft);
+    counter-increment: pub;
+  }
+
+  .pubs li::before {
+    content: counter(pub, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--fog-500);
+    transition: color 0.18s var(--ease);
+  }
+
+  .pubs li:hover::before {
+    color: var(--gold);
+  }
+
+  .title {
+    font-size: var(--step-0);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .title a {
+    color: var(--fog-100);
+    text-decoration: none;
+  }
+
+  .title a:hover {
+    color: var(--gold);
+  }
+
+  .authors {
+    margin-block-start: 0.3rem;
+    font-size: var(--step--1);
+    color: var(--fog-400);
+    line-height: 1.55;
+  }
+
+  .authors strong {
+    color: var(--flare);
+    font-weight: 600;
+  }
+
+  .meta-line {
+    margin-block-start: 0.2rem;
+    font-size: var(--step--1);
+    color: var(--fog-500);
+  }
+
+  .cites {
+    white-space: nowrap;
+  }
+
+  /* Two states on the same accent ramp: gold for refereed work, flare for
+     what is still on arXiv. */
+  .badge {
+    display: inline-block;
+    margin-inline-end: 0.5rem;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid color-mix(in oklab, var(--tint) 35%, transparent);
+    border-radius: 3px;
+    background: color-mix(in oklab, var(--tint) 12%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tint);
+    vertical-align: 0.08em;
+  }
+
+  .badge.published {
+    --tint: var(--gold);
+  }
+
+  .badge.preprint {
+    --tint: var(--flare);
+  }
+
+  @media (max-width: 30rem) {
+    .pubs li {
+      padding-left: 0;
+    }
+    .pubs li::before {
+      position: static;
+      display: block;
+      margin-block-end: 0.4rem;
+    }
+  }
+</style>

@@ -1,32 +1,29 @@
-# Vim
-*~
-*.sw[p_]
-
-# IntelliJ IDEA
-*.idea
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
-
-# Ruby Gem
-*.gem
-.bundle
-Gemfile.lock
-**/vendor/bundle
-
-# Node.js and NPM
-node_modules
+# Astro
+/dist/
+/.astro/
+node_modules/
 npm-debug.log*
-package-lock.json
-codekit-config.json
+
+# Note: the markdown generated from notebooks/ IS committed, on purpose. The
+# notebooks seed their RNGs, so re-rendering is byte-stable and a diff means a
+# real change in the prose, code or tables. CI regenerates it regardless.
+
+# Python bytecode from scripts/ (notebooks/ has its own rule)
+__pycache__/
+*.pyc
 
 # macOS
 .DS_Store
 
-# Jekyll generated files
-.jekyll-cache
-.jekyll-metadata
-.sass-cache
-_asset_bundler_cache
-_site
+# JetBrains IDE
+.idea/
+*.iml
+
+# Secrets (NASA ADS token)
+.env
+
+# Interactive `xy` charts: standalone ~0.5 MB HTML documents, regenerated on
+# every build and tightly coupled to the installed xy version. Unlike the
+# matplotlib figures these are not byte-stable across upgrades, so they stay out
+# of git. `npm run build:all` (not `npm run build`) is what produces them.
+/public/charts/

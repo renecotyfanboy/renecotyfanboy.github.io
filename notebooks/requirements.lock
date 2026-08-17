@@ -1,0 +1,73 @@
+# Fully pinned build environment, resolved for the CI platform (linux, py3.12).
+# This is what the workflow installs; notebooks/requirements.txt stays the file
+# of intent. Regenerate deliberately, then re-run the notebooks and check the
+# diff in src/content/posts/ is empty:
+#
+#   uv pip compile notebooks/requirements.txt \
+#     --python-platform linux --python-version 3.12 \
+#     --output-file notebooks/requirements.lock --annotation-style line --no-header
+#
+anywidget==0.11.0         # via xy
+asttokens==3.0.2          # via stack-data
+attrs==26.1.0             # via jsonschema, referencing
+beautifulsoup4==4.15.0    # via nbconvert
+bleach==6.4.0             # via nbconvert
+comm==0.2.3               # via ipykernel, ipywidgets
+debugpy==1.8.21           # via ipykernel
+defusedxml==0.7.1         # via nbconvert
+executing==2.2.1          # via stack-data
+fastjsonschema==2.22.2    # via nbformat
+ipykernel==7.3.0          # via -r notebooks/requirements.txt
+ipython==9.16.1           # via ipykernel, ipywidgets, -r notebooks/requirements.txt
+ipython-pygments-lexers==1.1.1  # via ipython
+ipywidgets==8.1.8         # via anywidget
+jedi==0.20.0              # via ipython
+jinja2==3.1.6             # via nbconvert
+jsonschema==4.26.0        # via nbformat
+jsonschema-specifications==2025.9.1  # via jsonschema
+jupyter-client==8.9.1     # via ipykernel, nbclient
+jupyter-core==5.9.1       # via ipykernel, jupyter-client, nbclient, nbconvert, nbformat
+jupyterlab-pygments==0.3.0  # via nbconvert
+jupyterlab-widgets==3.0.16  # via ipywidgets
+jupytext==1.19.5          # via -r notebooks/requirements.txt
+markdown-it-py==4.2.0     # via jupytext, mdit-py-plugins
+markupsafe==3.0.3         # via jinja2, nbconvert
+matplotlib-inline==0.2.2  # via ipykernel, ipython
+mdit-py-plugins==0.6.1    # via jupytext
+mdurl==0.1.2              # via markdown-it-py
+mistune==3.3.4            # via nbconvert
+nbclient==0.11.0          # via nbconvert, -r notebooks/requirements.txt
+nbconvert==7.17.1         # via -r notebooks/requirements.txt
+nbformat==5.11.1          # via jupytext, nbclient, nbconvert, -r notebooks/requirements.txt
+nest-asyncio2==1.7.2      # via ipykernel
+numpy==2.5.2              # via pandas, scipy, xy, -r notebooks/requirements.txt
+packaging==26.3           # via ipykernel, jupytext, nbconvert
+pandas==3.0.5             # via -r notebooks/requirements.txt
+pandocfilters==1.5.1      # via nbconvert
+parso==0.8.7              # via jedi
+pexpect==4.9.0            # via ipython
+platformdirs==4.11.3      # via jupyter-core
+prompt-toolkit==3.0.53    # via ipython
+psutil==7.2.2             # via ipykernel, ipython
+psygnal==0.15.1           # via anywidget
+ptyprocess==0.7.0         # via pexpect
+pure-eval==0.2.3          # via stack-data
+pygments==2.21.0          # via ipython, ipython-pygments-lexers, nbconvert
+python-dateutil==2.9.0.post0  # via jupyter-client, pandas
+pyyaml==6.0.3             # via jupytext, -r notebooks/requirements.txt
+pyzmq==27.1.0             # via ipykernel, jupyter-client
+referencing==0.37.0       # via jsonschema, jsonschema-specifications
+rpds-py==2026.6.3         # via jsonschema, referencing
+scipy==1.18.0             # via -r notebooks/requirements.txt
+six==1.17.0               # via python-dateutil
+soupsieve==2.9.2          # via beautifulsoup4
+stack-data==0.6.3         # via ipython
+tabulate==0.10.0          # via -r notebooks/requirements.txt
+tinycss2==1.5.1           # via bleach
+tornado==6.5.8            # via ipykernel, jupyter-client
+traitlets==5.16.1         # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, matplotlib-inline, nbclient, nbconvert, nbformat, -r notebooks/requirements.txt
+typing-extensions==4.16.0  # via anywidget, beautifulsoup4, jupyter-client, referencing
+wcwidth==0.8.2            # via prompt-toolkit
+webencodings==0.6.1       # via bleach, tinycss2
+widgetsnbextension==4.0.15  # via ipywidgets
+xy==0.0.6                 # via -r notebooks/requirements.txt

@@ -1,0 +1,197 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BlackHole from "../components/BlackHole.astro";
+import PostCard from "../components/PostCard.astro";
+import Icon from "../components/Icon.astro";
+import { getPosts } from "../utils/posts";
+import { SITE, SOCIALS } from "../consts";
+
+const recent = (await getPosts()).slice(0, 3);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <BlackHole />
+
+    <div class="wrap hero-content">
+      {/* The name is carried by the intro paragraph now. The page still needs
+          an h1, so it stays here for screen readers and search engines. */}
+      <h1 class="visually-hidden">{SITE.title}</h1>
+
+      <p class="meta eyebrow">Astrophysicist · IRAP, Toulouse</p>
+      <p class="tagline">{SITE.tagline}</p>
+
+      <ul class="links">
+        {
+          SOCIALS.filter((s) => s.icon !== "rss").map((s) => (
+            <li>
+              <a href={s.href} rel="me noopener">
+                <Icon name={s.icon} size={16} />
+                <span>{s.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap wrap--narrow intro">
+    <div class="rule rule--soft" aria-hidden="true"></div>
+    <p>
+      I am <span class="name">Simon Dupourqué</span>, a post-doc working in High-Energy Astrophysics,
+      specializing in statistics, numerical methods and machine learning. My current topics revolve around
+      X-ray spectroscopy to study how Galaxy Clusters form and evolve over time, to better use them as cosmological
+      probes. And I also doing a lot of random and unrelated stuff.
+    </p>
+  </section>
+
+  {
+    recent.length > 0 && (
+      <section class="wrap wrap--narrow recent">
+        <header class="recent-head">
+          <h2>Blog</h2>
+          <a class="meta all" href="/blog">
+            All posts <Icon name="arrow" size={14} />
+          </a>
+        </header>
+        {recent.map((post, i) => (
+          <PostCard post={post} index={i + 1} />
+        ))}
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    justify-items: center;
+    /* Deliberately short of a full viewport: the intro should peek below the
+       fold so the page reads as having something under the hero. */
+    min-height: min(72svh, 36rem);
+    padding-block-end: clamp(1.75rem, 5vh, 3.25rem);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .eyebrow {
+    color: var(--gold);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+  }
+
+  /* With the name gone, the tagline carries the hero on its own. */
+  .tagline {
+    margin-block-start: 0.5rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3.4rem);
+    line-height: 1.15;
+    color: var(--gold-soft);
+    text-wrap: balance;
+    text-shadow:
+      0 2px 26px rgba(0, 0, 0, 0.95),
+      0 1px 6px rgba(0, 0, 0, 0.9);
+  }
+
+  .links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--ink-900) 70%, transparent);
+    backdrop-filter: blur(6px);
+    color: var(--fog-300);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      color 0.16s var(--ease),
+      border-color 0.16s var(--ease),
+      background-color 0.16s var(--ease);
+  }
+
+  .links a:hover {
+    color: var(--gold);
+    border-color: color-mix(in oklab, var(--gold) 55%, transparent);
+    background: var(--ink-800);
+  }
+
+  .intro {
+    padding-block: 1rem 4rem;
+  }
+
+  .intro p {
+    margin-block-start: 2rem;
+    font-size: var(--step-1);
+    line-height: 1.75;
+    color: var(--fog-300);
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  /* The name, now that the hero no longer states it. Underlined with the
+     site's spectral rule rather than a plain rule, and deliberately not
+     gold — that colour means "link" everywhere else on the site. */
+  .name {
+    color: var(--fog-100);
+    font-weight: 700;
+    padding-block-end: 0.1em;
+    background-image: var(--spectrum);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 2px;
+    /* Keep the underline unbroken if the name wraps across two lines. */
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .recent {
+    padding-block-end: 5rem;
+  }
+
+  .recent-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-block-end: 0.5rem;
+  }
+
+  .recent-head h2 {
+    font-size: var(--step-2);
+  }
+
+  .all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .all:hover {
+    color: var(--gold);
+  }
+</style>

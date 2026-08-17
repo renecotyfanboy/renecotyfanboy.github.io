@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Not found" description="This page fell past the event horizon.">
+  <section class="four-oh-four">
+    <p class="meta">Error 404</p>
+    <h1>Past the horizon</h1>
+    <p class="text">
+      Whatever was here has crossed the event horizon. No information escapes —
+      but the rest of the site is still outside.
+    </p>
+    <p class="links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .four-oh-four {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    min-height: 62svh;
+    padding-inline: var(--gutter);
+  }
+
+  h1 {
+    font-size: var(--step-4);
+  }
+
+  .text {
+    max-width: 44ch;
+    margin-block-start: 0.75rem;
+    color: var(--fog-400);
+  }
+
+  .links {
+    display: flex;
+    gap: 1.75rem;
+    margin-block-start: 1.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .links a {
+    text-decoration: none;
+  }
+</style>

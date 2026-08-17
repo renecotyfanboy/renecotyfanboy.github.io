@@ -1,0 +1,53 @@
+---
+/* Decorative accretion disk. Purely presentational: it adds nothing to the
+   layout, and the page reads the same without it.
+
+   The disk itself is a still image -- `scripts/build_blackhole.py` ray-traces
+   it offline -- so it needs no canvas at all; the script only positions it.
+   It is declared here rather than injected so the browser starts fetching it
+   while parsing the document. The canvas alongside carries the orbiting
+   motes, and is the only surface the frame loop touches.
+
+   The starfield behind all of this is site-wide, in Starfield.astro. */
+---
+
+<div class="blackhole" aria-hidden="true">
+  <img data-bh="disk" src="/data/blackhole-disk.webp" alt="" decoding="async" />
+  <canvas data-bh="motes"></canvas>
+</div>
+
+<style>
+  .blackhole {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* Placed and sized by the script, once it knows the box the texture covers.
+     Hidden until then so it never flashes at the wrong size. */
+  .blackhole img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    max-width: none;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease, ease);
+  }
+
+  .blackhole img[data-placed] {
+    opacity: 1;
+  }
+
+  .blackhole canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+</style>
+
+<script>
+  import { initBlackHole } from "../scripts/blackhole.js";
+  initBlackHole(document.querySelector(".blackhole"));
+</script>

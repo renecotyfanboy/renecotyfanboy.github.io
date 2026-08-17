@@ -1,0 +1,167 @@
+---
+import { SITE, NAV } from "../consts";
+
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isActive = (href: string) => path === href || path.startsWith(href + "/");
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/">
+      <img
+        class="brand-mark"
+        src="/favicon-32x32.png"
+        alt=""
+        width="32"
+        height="32"
+        aria-hidden="true"
+      />
+      <span class="brand-name">{SITE.title}</span>
+    </a>
+
+    <nav aria-label="Main">
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class:list={["nav-link", { active: isActive(item.href) }]}
+                aria-current={isActive(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+  <div class="rule rule--header" aria-hidden="true"></div>
+</header>
+
+<script>
+  /* Publish the header's real height. It is not a constant: below ~34rem the
+     brand and nav wrap onto separate rows. Anything that sticks below the
+     header (the reading-progress bar, the table-of-contents rail) offsets
+     itself by this rather than guessing 4rem. */
+  const header = document.querySelector<HTMLElement>(".site-header");
+
+  if (header) {
+    const publish = () =>
+      document.documentElement.style.setProperty(
+        "--header-h",
+        `${header.offsetHeight}px`,
+      );
+
+    publish();
+    new ResizeObserver(publish).observe(header);
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in oklab, var(--ink-950) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 4rem;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--fog-100);
+  }
+
+  /* The site favicon, so the tab and the header carry the same mark. */
+  .brand-mark {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    border-radius: 25%;
+    filter: drop-shadow(0 0 5px color-mix(in oklab, var(--flare) 40%, transparent));
+    transition: filter 0.25s var(--ease);
+  }
+
+  .brand:hover .brand-mark {
+    filter: drop-shadow(0 0 9px color-mix(in oklab, var(--ember) 75%, transparent));
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  nav ul {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.9rem, 2.5vw, 1.9rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    position: relative;
+    display: block;
+    padding-block: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fog-400);
+    text-decoration: none;
+    transition: color 0.15s var(--ease);
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--spectrum);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.22s var(--ease);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--fog-100);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    transform: scaleX(1);
+  }
+
+  .rule--header {
+    height: 1px;
+    opacity: 0.35;
+  }
+
+  @media (max-width: 34rem) {
+    .bar {
+      justify-content: center;
+      padding-block: 0.75rem;
+      row-gap: 0.35rem;
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  notebook?: string;
+}
+
+const { notebook } = Astro.props;
+const repo = "https://github.com/renecotyfanboy/renecotyfanboy.github.io/blob/master";
+---
+
+<aside class="banner">
+  <p class="meta label">Executed notebook</p>
+  <p class="text">
+    Every chart and number below was produced by running the source at build
+    time — nothing is pasted in by hand.
+  </p>
+  <p class="actions">
+    {
+      notebook && (
+        <a href={`${repo}/${notebook}`}>
+          <Icon name="external" size={14} /> {notebook}
+        </a>
+      )
+    }
+  </p>
+</aside>
+
+<style>
+  .banner {
+    margin-block-start: 2rem;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--line);
+    border-inline-start: 2px solid;
+    border-image: var(--spectrum) 1;
+    border-image-slice: 1;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: var(--ink-850);
+  }
+
+  .label {
+    color: var(--flare);
+  }
+
+  .text {
+    margin-block-start: 0.5rem;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fog-400);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+    margin-block-start: 0.75rem;
+  }
+
+  .actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-decoration: none;
+  }
+
+  .actions a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import { SITE, SOCIALS } from "../consts";
+import Icon from "./Icon.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="rule rule--soft" aria-hidden="true"></div>
+  <div class="wrap inner">
+    <p class="meta">
+      © {year} {SITE.author} · built with <a href="https://astro.build">Astro</a>
+      &amp; <a href="https://jupyter.org">Jupyter</a>
+    </p>
+
+    <ul class="socials">
+      {
+        SOCIALS.map((s) => (
+          <li>
+            <a
+              href={s.href}
+              aria-label={s.label}
+              rel={s.href.startsWith("http") ? "me noopener" : undefined}
+            >
+              <Icon name={s.icon} size={17} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-block-start: auto;
+    padding-block-start: 1px;
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-block: 2rem 2.75rem;
+  }
+
+  .socials {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .socials a {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: var(--radius);
+    color: var(--fog-500);
+    transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
+  }
+
+  .socials a:hover {
+    color: var(--gold);
+    background: var(--ink-800);
+  }
+</style>

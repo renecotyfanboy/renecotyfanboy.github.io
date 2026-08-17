@@ -1,0 +1,25 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import Publications from "../components/Publications.astro";
+import { SCIX_SEARCH } from "../consts";
+---
+
+<PageLayout
+  title="Academia"
+>
+  <p class="note">
+    Citation counts are refreshed automatically from <a
+      href={SCIX_SEARCH}
+      rel="noopener">SciX</a
+    >.
+  </p>
+  <Publications />
+</PageLayout>
+
+<style>
+  .note {
+    margin-block-end: 1.5rem;
+    color: var(--fog-400);
+    font-size: var(--step--1);
+  }
+</style>
