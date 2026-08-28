@@ -401,6 +401,27 @@ pre {
   margin-block-start: 1.35em;
 }
 
+/* Justified body copy, the same setting the home page's intro already uses.
+   Hyphenation is not decoration here: at a 68ch measure, justifying without it
+   stretches word spacing far enough to open rivers down the column. The
+   browser takes its dictionary from `lang` on <html>.
+
+   The breakpoint is where the text column stops shrinking with the viewport
+   and sits at its designed 68ch. Below it, justification has too few words per
+   line to distribute, and a line carrying an unbreakable code span — which
+   cannot hyphenate — stretches into gaps several spaces wide.
+
+   Deliberately left ragged at every width: ledes, figure captions and card
+   blurbs. Two or three lines of large type justify into visible gaps and gain
+   nothing. */
+@media (min-width: 48rem) {
+  .prose > p,
+  .prose li {
+    text-align: justify;
+    hyphens: auto;
+  }
+}
+
 /* The short spectral underline under a section heading. Shared by article
    bodies and by the CV's own sections, which are not `.prose`. */
 .prose > h2,
@@ -489,6 +510,10 @@ pre {
 }
 
 .prose :not(pre) > code {
+  /* An identifier is not a word: the hyphenator would happily break a path or
+     a symbol name across lines, and the reader cannot tell the hyphen from
+     part of the name. */
+  hyphens: none;
   font-size: 0.86em;
   padding: 0.15em 0.4em;
   border-radius: var(--radius);

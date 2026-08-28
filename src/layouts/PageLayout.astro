@@ -1,5 +1,7 @@
 ---
+import type { MarkdownHeading } from "astro";
 import BaseLayout from "./BaseLayout.astro";
+import TableOfContents from "../components/TableOfContents.astro";
 
 /* There is deliberately no `.prose` grid here: that breakout grid exists for
    generated article bodies, which only PostLayout renders. */
@@ -7,26 +9,69 @@ interface Props {
   title: string;
   lede?: string;
   description?: string;
+  /** Anchors for a page-level ToC. Pages hand-pick these (they are not
+      derived from markdown), so two entries is already worth showing. */
+  headings?: MarkdownHeading[];
 }
 
-const { title, lede, description } = Astro.props;
+const { title, lede, description, headings = [] } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <header class="page-head">
-    <div class="measure">
-      <h1>{title}</h1>
-      <div class="rule rule--soft head-rule" aria-hidden="true"></div>
-      {lede && <p class="lede">{lede}</p>}
-    </div>
-  </header>
+  <div class="shell">
+    {
+      headings.length > 0 && (
+        <aside class="toc-rail">
+          <TableOfContents headings={headings} minItems={2} />
+        </aside>
+      )
+    }
 
-  <div class="page-body measure">
-    <slot />
+    <header class="page-head">
+      <div class="measure">
+        <h1>{title}</h1>
+        <div class="rule rule--soft head-rule" aria-hidden="true"></div>
+        {lede && <p class="lede">{lede}</p>}
+      </div>
+    </header>
+
+    {
+      headings.length > 0 && (
+        <div class="measure">
+          <TableOfContents headings={headings} variant="inline" minItems={2} />
+        </div>
+      )
+    }
+
+    <div class="page-body measure">
+      <slot />
+    </div>
   </div>
 </BaseLayout>
 
 <style>
+  .shell {
+    position: relative;
+  }
+
+  .toc-rail {
+    display: none;
+  }
+
+  /* Same rail as PostLayout, minus the `--bleed` clearance: page bodies are a
+     plain `.measure` column with nothing breaking out of it. */
+  @media (min-width: 84rem) {
+    .toc-rail {
+      --col: min(var(--measure), 100% - (2 * var(--gutter)));
+
+      display: block;
+      position: absolute;
+      inset-block: 0;
+      right: calc(50% + (var(--col) / 2) + 2rem);
+      width: 12rem;
+    }
+  }
+
   .page-head {
     padding-block: clamp(3rem, 8vw, 5.5rem) 0;
   }

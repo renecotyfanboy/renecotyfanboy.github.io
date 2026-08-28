@@ -3,14 +3,23 @@ import type { MarkdownHeading } from "astro";
 
 interface Props {
   headings: MarkdownHeading[];
+  /** "rail" pins the list in the margin, wide viewports only. "inline" is the
+      narrow-viewport fallback: a collapsed block above the body, hidden as
+      soon as the rail has room. Layouts render one of each. */
+  variant?: "rail" | "inline";
+  /** Entries needed before a ToC is worth its space. Articles keep the
+      default; pages with a couple of hand-picked anchors pass 2. */
+  minItems?: number;
 }
+
+const { variant = "rail", minItems = 3 } = Astro.props;
 
 /* h2/h3 only — deeper levels turn the rail into noise. */
 const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 {
-  items.length > 2 && (
+  items.length >= minItems && variant === "rail" && (
     <nav class="toc" aria-label="Table of contents">
       <p class="meta toc-title">Contents</p>
       <ul>
@@ -23,6 +32,21 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
         ))}
       </ul>
     </nav>
+  )
+}
+
+{
+  items.length >= minItems && variant === "inline" && (
+    <details class="toc-inline">
+      <summary class="meta">Contents</summary>
+      <ul>
+        {items.map((h) => (
+          <li class:list={[`d${h.depth}`]}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ul>
+    </details>
   )
 }
 
@@ -90,6 +114,59 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
   .toc-title {
     margin-block-end: 0.85rem;
     color: var(--fog-500);
+  }
+
+  /* ---- inline (narrow-viewport) variant ---- */
+
+  .toc-inline {
+    margin-block-start: 2.25rem;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+  }
+
+  /* The rail takes over from here. */
+  @media (min-width: 84rem) {
+    .toc-inline {
+      display: none;
+    }
+  }
+
+  .toc-inline summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    color: var(--fog-400);
+  }
+
+  .toc-inline summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc-inline summary::before {
+    content: "";
+    flex: none;
+    width: 0.32rem;
+    height: 0.32rem;
+    border-block-end: 1px solid currentColor;
+    border-inline-end: 1px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.18s var(--ease);
+  }
+
+  .toc-inline[open] summary::before {
+    transform: rotate(45deg);
+  }
+
+  .toc-inline summary:hover {
+    color: var(--gold);
+  }
+
+  .toc-inline ul {
+    padding: 0.15rem 1rem 0.9rem;
+    border-inline-start: 0;
   }
 
   ul {

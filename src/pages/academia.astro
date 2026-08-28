@@ -1,11 +1,19 @@
 ---
+import type { MarkdownHeading } from "astro";
 import PageLayout from "../layouts/PageLayout.astro";
 import Publications from "../components/Publications.astro";
 import { SCIX_SEARCH } from "../consts";
+
+/* ToC anchors; the ids must match the sections Publications renders. */
+const headings: MarkdownHeading[] = [
+  { depth: 2, slug: "preprints", text: "Preprints" },
+  { depth: 2, slug: "published", text: "Published articles" },
+];
 ---
 
 <PageLayout
   title="Academia"
+  headings={headings}
 >
   <p class="note">
     Citation counts are refreshed automatically from <a

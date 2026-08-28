@@ -86,9 +86,10 @@ renders from the front matter; a second one in the body gives the page two
 `<h1>`s and a screen reader no idea which is the title.
 
 `##` gets the short spectral underline. `###` is quieter, for subdivisions.
-Both, and only these two, feed the table of contents in the left rail — which
-appears above 84rem of viewport and only when there are more than two of them.
-`####` renders, but goes nowhere near the rail.
+Both, and only these two, feed the table of contents, and only when there are
+more than two of them. Above 84rem of viewport it lives in the left rail;
+below that, the same list folds into a collapsed “Contents” block between the
+header and the body. `####` renders, but goes nowhere near either.
 
 Heading text becomes the anchor id, so `## The checklist` is linkable as
 `#the-checklist`. Renaming a heading breaks any link that pointed at it.
@@ -220,14 +221,81 @@ diagram sits wider than the paragraph above it:
 <figcaption>Both authoring paths land in the same content collection, so from Astro's point of view there is only one kind of post. The ember box is the only step that runs code.</figcaption>
 </figure>
 
-For an image, put the file next to the post and reference it relatively —
-`![alt](./exposure-map.png)` — which routes it through Astro's asset pipeline
-(hashing, sizing, `dist/_assets/`). A path like `/img/foo.png` is served from
-`public/` untouched, which is right for something already optimised and wrong
-for a 4 MB screenshot. Relative images are checked at build: a typo in the
-filename fails the build instead of shipping a broken image.
+### Raster images
+
+Put the file next to the post and reference it with **markdown syntax**. That
+is what routes it through Astro's asset pipeline:
+
+````markdown
+![24 bins of counts, and the power law they were drawn from](./writing-a-post_files/poisson-counts.png)
+````
+
+The pipeline converts to webp, hashes the name into `_assets/`, and inlines the
+dimensions so the page does not reflow when the image lands. The figure below
+went from a 43.7 kB PNG to a 13.4 kB webp on the way out.
+
+Written like that, though, the image sits in the text column with no caption.
+To widen it and caption it, wrap it in a `<figure>` — with **blank lines around
+the image line**, which is what keeps it markdown rather than raw HTML:
+
+````markdown
+<figure>
+
+![alt text](./writing-a-post_files/poisson-counts.png)
+
+<figcaption>The caption.</figcaption>
+</figure>
+````
+
+<figure>
+
+![24 bins of Poisson counts with error bars, falling steeply with energy, and the power law they were drawn from](./writing-a-post_files/poisson-counts.png)
+
+<figcaption>The same file as the snippet above, wrapped in a figure: it takes the wide band and carries this caption. A one-shot matplotlib render, not part of the build — a figure that has to stay in step with its code belongs in a notebook post instead.</figcaption>
+</figure>
+
+The folder name follows nbconvert's convention (`<slug>_files/`), so
+hand-written assets and generated ones sit the same way on disk.
+
+What not to write is `<img src="./writing-a-post_files/poisson-counts.png">`.
+Astro rewrites markdown image syntax only; a raw `<img>` keeps its literal
+`src`, which the browser resolves against `/blog/<slug>/`. The build succeeds
+and the page ships a broken image — the one failure mode here that says nothing
+at build time.
+
+| Form | Processed | Width | If the file is missing |
+| --- | --- | --- | --- |
+| `![alt](./x.png)` | yes, webp in `_assets/` | text column | build fails |
+| `<figure>` + blank lines + `![alt](./x.png)` | yes | wide, captioned | build fails |
+| `<img src="./x.png">` | **no** | wide | **ships broken, silently** |
+| `<img src="/img/x.png">` | no, served from `public/` | wide | ships broken, silently |
+
+A `public/` path is right for something already optimised, or something the
+pipeline must not touch. It is wrong for a 4 MB screenshot.
 
 Alt text is not optional. It is the only version of the figure some readers get.
+
+### Images from a notebook
+
+**A cell that produces an image** needs nothing at all. nbconvert extracts
+every `image/png` output to `src/content/posts/<stem>_files/output_<cell>_<n>.png`
+and writes `![png](./<stem>_files/output_1_0.png)` into the post — the
+processed form, automatically. The alt text it invents is the literal string
+`png`, so anything worth describing wants a caption in the prose around it, or
+your own markup emitted through `display(Markdown(...))` the way
+`xysite.embed()` does it.
+
+**A static image referenced from the notebook's own prose** is passed through
+untouched, and the path is then resolved relative to the *generated post*. So
+`![alt](./figure.png)` sitting next to your notebook fails the build: Astro
+looks for `src/content/posts/figure.png`. Put the file where the generated post
+will be, or serve it from `public/`.
+
+One thing to check before reaching for a plotting library:
+`notebooks/requirements.txt` pulls in numpy, scipy, pandas and `xy`, and
+nothing else that draws. `xy` emits interactive iframes rather than images, so
+a cell calling matplotlib runs only if you installed it by hand — CI installs
+`requirements.lock` and the notebook fails there. Add it to both files first.
 
 ## Charts are notebook-only
 
@@ -267,13 +335,13 @@ Chart files are not committed. `npm run build` alone leaves the iframes empty;
 ### The body
 
 - Starts at `##`, no `#` anywhere.
-- More than two `##`/`###` headings if you want the contents rail.
+- More than two `##`/`###` headings if you want a table of contents.
 - Every fence carries a language, except deliberate output blocks.
 - Display equations have their `$$` on separate lines. A single-line
   `$$…$$` silently renders inline.
 - Every figure has a caption and every image has alt text.
-- Relative image paths (`./foo.png`), not `public/` ones, unless the asset is
-  deliberately unprocessed.
+- Images written as markdown (`![alt](./foo.png)`), never as a raw
+  `<img src="./foo.png">` — that one ships broken without failing the build.
 - Long code lines under ~80 characters; they scroll, they do not wrap.
 
 ### Before publishing

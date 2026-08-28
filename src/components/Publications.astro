@@ -21,6 +21,14 @@ const { stats, items } = publications as {
 /* Split the author string around my name so it can be emphasised without
    injecting raw HTML from the API payload. */
 const splitAuthors = (authors: string) => authors.split(ME);
+
+/* Preprints first: the feed is newest-first and that is where new work lands.
+   The ids double as ToC anchors — academia.astro hands the matching headings
+   to PageLayout, so keep them in sync. */
+const sections = [
+  { id: "preprints", title: "Preprints", items: items.filter((p) => p.preprint) },
+  { id: "published", title: "Published articles", items: items.filter((p) => !p.preprint) },
+].filter((s) => s.items.length > 0);
 ---
 
 {
@@ -36,45 +44,49 @@ const splitAuthors = (authors: string) => authors.split(ME);
   )
 }
 
-<ol class="pubs">
-  {
-    items.map((p) => {
-      const parts = splitAuthors(p.authors);
-      return (
-        <li>
-          <p class="title">
-            <a href={p.url} rel="noopener">
-              {p.title}
-            </a>
-          </p>
-          <p class="authors">
-            {parts.map((part, i) => (
-              <>
-                {i > 0 && <strong>{ME}</strong>}
-                {part}
-              </>
-            ))}
-          </p>
-          <p class="meta-line">
-            <span class:list={["badge", p.preprint ? "preprint" : "published"]}>
-              {p.preprint ? "preprint" : "published"}
-            </span>
-            <em>{p.venue}</em>
-            {p.volume && ` ${p.volume}`}
-            {p.page && `, ${p.page}`}
-            {p.year && ` (${p.year})`}
-            {!!p.citations && p.citations > 0 && (
-              <span class="cites">
-                {" · "}
-                {p.citations} citation{p.citations === 1 ? "" : "s"}
-              </span>
-            )}
-          </p>
-        </li>
-      );
-    })
-  }
-</ol>
+{
+  sections.map((section) => (
+    <section class="pub-sec">
+      <h2 class="title-rule" id={section.id}>
+        {section.title}
+      </h2>
+      <ol class="pubs">
+        {section.items.map((p) => {
+          const parts = splitAuthors(p.authors);
+          return (
+            <li>
+              <p class="title">
+                <a href={p.url} rel="noopener">
+                  {p.title}
+                </a>
+              </p>
+              <p class="authors">
+                {parts.map((part, i) => (
+                  <>
+                    {i > 0 && <strong>{ME}</strong>}
+                    {part}
+                  </>
+                ))}
+              </p>
+              <p class="meta-line">
+                <em>{p.venue}</em>
+                {p.volume && ` ${p.volume}`}
+                {p.page && `, ${p.page}`}
+                {p.year && ` (${p.year})`}
+                {!!p.citations && p.citations > 0 && (
+                  <span class="cites">
+                    {" · "}
+                    {p.citations} citation{p.citations === 1 ? "" : "s"}
+                  </span>
+                )}
+              </p>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  ))
+}
 
 <style>
   .stats {
@@ -88,9 +100,18 @@ const splitAuthors = (authors: string) => authors.split(ME);
     color: var(--gold);
   }
 
+  .pub-sec + .pub-sec {
+    margin-block-start: 3.5rem;
+  }
+
+  /* Underline comes from `.title-rule` in global.css. */
+  h2 {
+    font-size: var(--step-2);
+  }
+
   .pubs {
     list-style: none;
-    margin: 0;
+    margin: 1.25rem 0 0;
     padding: 0;
     counter-reset: pub;
   }
@@ -100,6 +121,10 @@ const splitAuthors = (authors: string) => authors.split(ME);
     padding: 1.25rem 0 1.25rem 3rem;
     border-block-start: 1px solid var(--line-soft);
     counter-increment: pub;
+  }
+
+  .pubs li:first-child {
+    border-block-start: 0;
   }
 
   .pubs li::before {
@@ -153,31 +178,6 @@ const splitAuthors = (authors: string) => authors.split(ME);
 
   .cites {
     white-space: nowrap;
-  }
-
-  /* Two states on the same accent ramp: gold for refereed work, flare for
-     what is still on arXiv. */
-  .badge {
-    display: inline-block;
-    margin-inline-end: 0.5rem;
-    padding: 0.1rem 0.4rem;
-    border: 1px solid color-mix(in oklab, var(--tint) 35%, transparent);
-    border-radius: 3px;
-    background: color-mix(in oklab, var(--tint) 12%, transparent);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--tint);
-    vertical-align: 0.08em;
-  }
-
-  .badge.published {
-    --tint: var(--gold);
-  }
-
-  .badge.preprint {
-    --tint: var(--flare);
   }
 
   @media (max-width: 30rem) {

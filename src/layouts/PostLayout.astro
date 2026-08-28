@@ -72,6 +72,10 @@ const hasMath = /\$\$[\s\S]*?\$\$|\$(?![\s$])[^$\n]*(?<![\s$])\$/.test(post.body
         </div>
       </header>
 
+      <div class="measure">
+        <TableOfContents headings={headings} variant="inline" />
+      </div>
+
       <div class="prose post-body">
         <slot />
       </div>
