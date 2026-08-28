@@ -1,15 +1,52 @@
 ---
+import type { MarkdownHeading } from "astro";
 import PageLayout from "../layouts/PageLayout.astro";
+import { tagSlug } from "../utils/posts";
 
 type Entry = {
   when: string;
-  what: string;
+  /* Optional: an entry can be nothing but its bullets, e.g. peer review. */
+  what?: string;
   where?: string;
   href?: string;
-  sub?: { when?: string; what: string; href?: string }[];
+  /* Extra plain lines under the entry, e.g. supervisors. */
+  notes?: string[];
+  /* Bulleted list under the entry, e.g. the journals reviewed for. */
+  bullets?: string[];
 };
 
 const sections: { title: string; entries: Entry[] }[] = [
+  {
+    title: "Research experience",
+    entries: [
+      {
+        when: "2023–now",
+        what: "Building inference tools for X-ray spectroscopy",
+        where: "Post-doctoral researcher, IRAP",
+      },
+      {
+        when: "2020–2023",
+        what: "Dynamical assembly of the largest matter halos in the Universe",
+        where: "Ph.D Thesis, IRAP & Université de Toulouse",
+        notes: ["Supervised by Étienne Pointecouteau & Nicolas Clerc"],
+      },
+      {
+        when: "2020",
+        what: "Antistar fraction in the solar neighbourhood",
+        where: "Master II internship, IRAP",
+      },
+      {
+        when: "2018",
+        what: "Orbital transfer between LLO & NRHO",
+        where: "Master I internship, ISAE-Supaero",
+      },
+      {
+        when: "2016",
+        what: "Similarity transformations & the nucleon-nucleon interaction",
+        where: "Bachelor III internship, CENBG",
+      },
+    ],
+  },
   {
     title: "Education",
     entries: [
@@ -32,45 +69,75 @@ const sections: { title: string; entries: Entry[] }[] = [
       { when: "2013–2016", what: "CPGE PCSI/PC", where: "Lycée René Cassin, Bayonne" },
     ],
   },
+  {
+    title: "Peer review",
+    entries: [
+      {
+        when: "2026",
+        bullets: [
+          "Transactions on Pattern Analysis and Machine Intelligence",
+          "Open Journal of Astrophysics",
+          "Astronomy and Computing",
+          "RAS Techniques and Instruments",
+          "The Astrophysical Journal",
+        ],
+      },
+      {
+        when: "2025",
+        bullets: ["Nature Astronomy"],
+      },
+      {
+        when: "2024",
+        bullets: [
+          "Publications of the Astronomical Society of Australia",
+          "Journal of Open Source Software",
+        ],
+      },
+    ],
+  },
 ];
+
+/* One anchor per section; the ToC only appears once there are two or more. */
+const headings: MarkdownHeading[] = sections.map((s) => ({
+  depth: 2,
+  slug: tagSlug(s.title),
+  text: s.title,
+}));
 ---
 
 <PageLayout
   title="Curriculum Vitae"
   description="Curriculum vitae"
+  headings={headings}
 >
   {
     sections.map((section) => (
       <section class="sec">
-        <h2 class="title-rule">{section.title}</h2>
+        <h2 class="title-rule" id={tagSlug(section.title)}>
+          {section.title}
+        </h2>
         <ol class="entries">
           {section.entries.map((e) => (
             <li>
               <span class="when meta">{e.when}</span>
               <div class="what">
-                <p class="line">
-                  {e.href ? (
-                    <a href={e.href} rel="noopener">
-                      {e.what}
-                    </a>
-                  ) : (
-                    e.what
-                  )}
-                  {e.where && <span class="where">{e.where}</span>}
-                </p>
-                {e.sub && (
-                  <ul class="sub">
-                    {e.sub.map((s) => (
-                      <li>
-                        {s.when && <span class="meta sub-when">{s.when}</span>}
-                        {s.href ? (
-                          <a href={s.href} rel="noopener">
-                            {s.what}
-                          </a>
-                        ) : (
-                          s.what
-                        )}
-                      </li>
+                {(e.what || e.where) && (
+                  <p class="line">
+                    {e.href ? (
+                      <a href={e.href} rel="noopener">
+                        {e.what}
+                      </a>
+                    ) : (
+                      e.what
+                    )}
+                    {e.where && <span class="where">{e.where}</span>}
+                  </p>
+                )}
+                {e.notes?.map((note) => <p class="note">{note}</p>)}
+                {e.bullets && (
+                  <ul class="bullets">
+                    {e.bullets.map((b) => (
+                      <li>{b}</li>
                     ))}
                   </ul>
                 )}
@@ -131,26 +198,31 @@ const sections: { title: string; entries: Entry[] }[] = [
     font-style: italic;
   }
 
-  .sub {
-    margin: 0.7rem 0 0;
-    padding: 0 0 0 1rem;
-    list-style: none;
-    border-inline-start: 1px solid var(--line);
+  .note {
+    margin-block-start: 0.3rem;
+    color: var(--fog-400);
+    font-size: 0.78rem;
   }
 
-  .sub li {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    align-items: baseline;
-    padding-block: 0.22rem;
-    font-size: var(--step--1);
-    color: var(--fog-300);
+  /* Bullets carry the entry on their own, so they read at title size. */
+  .bullets {
+    margin: 0;
+    padding-inline-start: 1.2rem;
+    list-style: disc;
   }
 
-  .sub-when {
-    color: var(--fog-500);
-    font-size: 0.65rem;
+  .line + .bullets {
+    margin-block-start: 0.45rem;
+  }
+
+  .bullets li {
+    padding-block: 0.18rem;
+    color: var(--fog-100);
+    line-height: 1.5;
+  }
+
+  .bullets li::marker {
+    color: var(--gold);
   }
 
   @media (max-width: 30rem) {
