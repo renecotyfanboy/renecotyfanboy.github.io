@@ -13,6 +13,8 @@ type Entry = {
   notes?: string[];
   /* Bulleted list under the entry, e.g. the journals reviewed for. */
   bullets?: string[];
+  /* Small square image beside the entry, e.g. a project logo (public/img/). */
+  logo?: { src: string; alt: string };
 };
 
 const sections: { title: string; entries: Entry[] }[] = [
@@ -44,6 +46,26 @@ const sections: { title: string; entries: Entry[] }[] = [
         when: "2016",
         what: "Similarity transformations & the nucleon-nucleon interaction",
         where: "Bachelor III internship, CENBG",
+      },
+    ],
+  },
+  {
+    title: "Software",
+    entries: [
+      {
+        when: "2022–now",
+        what: "jaxspec",
+        where: "Bayesian X-ray spectral fitting in pure Python, built on JAX · author & maintainer",
+        href: "https://github.com/renecotyfanboy/jaxspec",
+        notes: ["Dupourqué et al. 2024, A&A 690, A317"],
+        logo: { src: "/img/jaxspec.png", alt: "jaxspec logo: a capybara wearing glasses" },
+      },
+      {
+        when: "2023–now",
+        what: "ChainConsumer",
+        where: "Corner plots, LaTeX tables and walk plots for MCMC chains · co-maintainer",
+        href: "https://github.com/Samreay/ChainConsumer",
+        logo: { src: "/img/chainconsumer.svg", alt: "" },
       },
     ],
   },
@@ -121,6 +143,17 @@ const headings: MarkdownHeading[] = sections.map((s) => ({
             <li>
               <span class="when meta">{e.when}</span>
               <div class="what">
+                {e.logo && (
+                  <img
+                    class="logo"
+                    src={e.logo.src}
+                    alt={e.logo.alt}
+                    width="44"
+                    height="44"
+                    loading="lazy"
+                  />
+                )}
+                <div class="body">
                 {(e.what || e.where) && (
                   <p class="line">
                     {e.href ? (
@@ -141,6 +174,7 @@ const headings: MarkdownHeading[] = sections.map((s) => ({
                     ))}
                   </ul>
                 )}
+                </div>
               </div>
             </li>
           ))}
@@ -176,6 +210,30 @@ const headings: MarkdownHeading[] = sections.map((s) => ({
 
   .entries > li:first-child {
     border-block-start: 0;
+  }
+
+  .what {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    min-width: 0;
+  }
+
+  .body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Project logos sit on a dim tile so a white mark reads against the page. */
+  .logo {
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.3rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 0.55rem;
+    background: var(--ink-800);
+    object-fit: contain;
   }
 
   .when {

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Fetch publications from SciX by author name into src/data/publications.json,
-which src/components/Publications.astro renders at build time.
+which src/components/Publications.astro renders at build time: refereed
+articles, arXiv preprints and conference proceedings.
 
 SciX (the Science Explorer) is the successor to NASA ADS and serves the same
 API, so an existing ADS token keeps working against api.scixplorer.org.
@@ -14,6 +15,7 @@ Dependency-free (Python 3 stdlib).
 Run locally:  python3 scripts/fetch_publications.py
 """
 
+import html
 import json
 import os
 import re
@@ -76,7 +78,7 @@ def fmt_authors(authors):
 
 
 def clean_title(t):
-    t = (t or "").replace("$", "").replace("{", "").replace("}", "")
+    t = html.unescape(t or "").replace("$", "").replace("{", "").replace("}", "")
     t = t.replace("─", "–")   # the API sometimes returns U+2500 (box draw) for an en dash
     return re.sub(r"\s+", " ", t).strip()
 
@@ -86,6 +88,13 @@ def title_key(t):
     refereed version shows up. Punctuation and case drift between the two
     records, so only letters and digits are kept."""
     return re.sub(r"[^a-z0-9]+", "", clean_title(t).lower())[:80]
+
+
+def clean_venue(pub):
+    """Conference names come with the event dates glued on ("46th COSPAR
+    Scientific Assembly. Held 1-9 August"); keep the name only."""
+    pub = (pub or "").replace(" and ", " & ")
+    return re.sub(r"\.\s*Held\b.*$", "", pub).strip()
 
 
 def first(v):
@@ -140,7 +149,9 @@ def main():
     items = []
     for d in docs:
         doctype = d.get("doctype")
-        if doctype not in ("article", "eprint"):   # drop proceedings, abstracts, software, theses, etc.
+        # Keep refereed articles, preprints and conference proceedings; drop
+        # software records, telegrams, abstracts, theses, etc.
+        if doctype not in ("article", "eprint", "inproceedings"):
             continue
         bib = d.get("bibcode") or ""
         pub = d.get("pub") or ""
@@ -158,7 +169,7 @@ def main():
         item = {
             "title": clean_title(first(d.get("title"))),
             "authors": fmt_authors(d.get("author") or []),
-            "venue": (d.get("pub") or "").replace(" and ", " & "),
+            "venue": clean_venue(d.get("pub")),
             "volume": d.get("volume") or "",
             "page": first(d.get("page")),
             "year": str(d.get("year") or ""),
@@ -172,23 +183,28 @@ def main():
             item["volume"] = item["page"].replace("arXiv:", "")
             item["page"] = ""
             item["preprint"] = True
+        elif doctype == "inproceedings":
+            item["proceeding"] = True
         items.append(item)
 
-    # Metrics are over refereed work only, so an unrefereed preprint picking up
-    # early citations does not move the h-index.
-    counts = sorted((it["citations"] for it in items if not it.get("preprint")),
+    # Metrics are over refereed articles only, so an unrefereed preprint or a
+    # conference proceeding picking up early citations does not move the h-index.
+    counts = sorted((it["citations"] for it in items
+                     if not it.get("preprint") and not it.get("proceeding")),
                     reverse=True)
     h = 0
     while h < len(counts) and counts[h] >= h + 1:
         h += 1
 
     n_preprints = sum(1 for it in items if it.get("preprint"))
+    n_proceedings = sum(1 for it in items if it.get("proceeding"))
     out = {
         "stats": {
             "total": sum(counts),
             "h_index": h,
-            "count": len(items) - n_preprints,
+            "count": len(items) - n_preprints - n_proceedings,
             "preprints": n_preprints,
+            "proceedings": n_proceedings,
         },
         "items": items,
     }
@@ -197,9 +213,10 @@ def main():
         json.dump(out, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
 
-    print("Wrote %d articles + %d preprints (total %d citations, h-index %d) -> %s"
-          % (out["stats"]["count"], n_preprints, out["stats"]["total"], h,
-             os.path.relpath(OUT, ROOT)))
+    print("Wrote %d articles + %d preprints + %d proceedings "
+          "(total %d citations, h-index %d) -> %s"
+          % (out["stats"]["count"], n_preprints, n_proceedings,
+             out["stats"]["total"], h, os.path.relpath(OUT, ROOT)))
     return 0
 
 

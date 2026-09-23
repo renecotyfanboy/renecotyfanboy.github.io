@@ -1,8 +1,8 @@
 export const SITE = {
-  title: "An astrophysicist doing stuff",
+  title: "Simon Dupourqué's website",
   tagline: "An astrophysicist doing stuff",
   description:
-    "Personal website of Simon Dupourqué — astrophysicist working on Bayesian inference and numerical methods for X-ray astronomy.",
+    "Personal website of Simon Dupourqué.",
   author: "Simon Dupourqué",
   email: "simon.dupourque@utoulouse.fr",
   locale: "en",

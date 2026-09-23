@@ -4,7 +4,13 @@ import { SCIX_SEARCH } from "../consts";
 
 const ME = "S. Dupourqué";
 const { stats, items } = publications as {
-  stats?: { total: number; h_index: number; count: number; preprints?: number };
+  stats?: {
+    total: number;
+    h_index: number;
+    count: number;
+    preprints?: number;
+    proceedings?: number;
+  };
   items: {
     title: string;
     authors: string;
@@ -15,6 +21,7 @@ const { stats, items } = publications as {
     citations?: number;
     url: string;
     preprint?: boolean;
+    proceeding?: boolean;
   }[];
 };
 
@@ -23,11 +30,16 @@ const { stats, items } = publications as {
 const splitAuthors = (authors: string) => authors.split(ME);
 
 /* Preprints first: the feed is newest-first and that is where new work lands.
-   The ids double as ToC anchors — academia.astro hands the matching headings
-   to PageLayout, so keep them in sync. */
+   Proceedings close the page. The ids double as ToC anchors — academia.astro
+   hands the matching headings to PageLayout, so keep them in sync. */
 const sections = [
   { id: "preprints", title: "Preprints", items: items.filter((p) => p.preprint) },
-  { id: "published", title: "Published articles", items: items.filter((p) => !p.preprint) },
+  {
+    id: "published",
+    title: "Published articles",
+    items: items.filter((p) => !p.preprint && !p.proceeding),
+  },
+  { id: "proceedings", title: "Proceedings", items: items.filter((p) => p.proceeding) },
 ].filter((s) => s.items.length > 0);
 ---
 
@@ -36,7 +48,8 @@ const sections = [
     <p class="stats">
       <strong>{stats.total}</strong> citations · h-index{" "}
       <strong>{stats.h_index}</strong> · {stats.count} articles
-      {!!stats.preprints && ` · ${stats.preprints} preprints`} ·{" "}
+      {!!stats.preprints && ` · ${stats.preprints} preprints`}
+      {!!stats.proceedings && ` · ${stats.proceedings} proceedings`} ·{" "}
       <a href={SCIX_SEARCH} rel="noopener">
         via SciX
       </a>
