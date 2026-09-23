@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="A corner plot: two marginal distributions and their joint contours">
+  <!-- Stylised corner plot in the site palette; ChainConsumer has no logo of its own. -->
+  <g fill="none" stroke="#62666f" stroke-width="1.2" stroke-linecap="round">
+    <path d="M3 3v27h27"/>
+    <path d="M3 35v26h27"/>
+    <path d="M35 35v26h26"/>
+  </g>
+  <path d="M3 30C11 30 12 5 16 5s5 25 14 25z" fill="#e8b45c" fill-opacity="0.3" stroke="#e8b45c" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M35 61c8 0 9-25 13-25s5 25 13 25z" fill="#e8b45c" fill-opacity="0.3" stroke="#e8b45c" stroke-width="1.8" stroke-linejoin="round"/>
+  <g transform="translate(16.5 48) rotate(-38)">
+    <ellipse rx="11.5" ry="6.5" fill="#ef7d2e" fill-opacity="0.3" stroke="#ef7d2e" stroke-width="1.8"/>
+    <ellipse rx="6" ry="3.4" fill="#ef7d2e" fill-opacity="0.85" stroke="#ef7d2e" stroke-width="1.2"/>
+  </g>
+</svg>
