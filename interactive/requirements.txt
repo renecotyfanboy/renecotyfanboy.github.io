@@ -1,0 +1,4 @@
+# Separate from the existing Jupyter build environment.
+marimo==0.25.0
+# marimo's HTML/WASM exporter uses uv to run its pinned import analyzer.
+uv==0.10.9

@@ -27,3 +27,6 @@ __pycache__/
 # matplotlib figures these are not byte-stable across upgrades, so they stay out
 # of git. `npm run build:all` (not `npm run build`) is what produces them.
 /public/charts/
+
+# marimo POC: rebuilt by scripts/build_marimo.py
+/public/notebooks/marimo/

@@ -94,6 +94,12 @@ jobs:
       - name: Execute notebooks
         run: python3 scripts/build_notebooks.py
 
+      - name: Export marimo notebook for the browser
+        run: |
+          python3 -m venv interactive/.venv
+          interactive/.venv/bin/python -m pip install -r interactive/requirements.txt
+          interactive/.venv/bin/python scripts/build_marimo.py
+
       - name: Install site dependencies
         # `astro build` needs no devDependency; skipping them drops ~68 MB and
         # the whole language-server subtree from every deploy and weekly cron.

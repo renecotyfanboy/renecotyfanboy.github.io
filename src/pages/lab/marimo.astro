@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const notebook = "/notebooks/marimo/index.html";
+const editor = "/notebooks/marimo/edit.html";
+---
+
+<BaseLayout
+  title="Counting photons — an interactive notebook"
+  description="Explore photon counting noise with a Python notebook that runs in your browser."
+>
+  <article class="experiment">
+    <header class="intro">
+      <p class="eyebrow">Notebook experiment <span>01 / marimo</span></p>
+      <h1>A little light.<br />A lot of randomness.</h1>
+      <p class="lede">
+        Even a perfectly steady source flickers in the data. Count its photons,
+        change its brightness, and see where the noise comes from.
+      </p>
+    </header>
+
+    <section class="notebook" aria-label="Interactive photon-counting notebook">
+      <div class="notebook-bar">
+        <span class="status"><span aria-hidden="true">●</span> Python in your browser</span>
+        <a href={editor} target="_blank" rel="noopener">Edit the code ↗</a>
+      </div>
+      <iframe
+        src={notebook}
+        title="Counting photons: interactive marimo notebook"
+        height="960"
+      ></iframe>
+    </section>
+
+    <div class="afterword">
+      <p>
+        Move either slider to run the calculation again. To change the experiment
+        itself, open <a href={editor} target="_blank" rel="noopener">the notebook editor</a>
+        and press ▶ to run its cells. Your edits stay in your browser; download
+        a copy to keep them.
+      </p>
+      <p class="note">
+        The first launch downloads Python and may take a moment. An internet
+        connection and JavaScript are required.
+        <a href={notebook} target="_blank" rel="noopener">Open the experiment on its own ↗</a>
+      </p>
+      <a class="back" href="/blog/">← Back to the blog</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .experiment {
+    width: min(100% - 2 * var(--gutter), 66rem);
+    margin-inline: auto;
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .intro, .afterword {
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-block-end: 1.5rem;
+  }
+
+  .eyebrow span { color: var(--fog-400); }
+  h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); line-height: 1.1; }
+  .lede { margin-block-start: 1.5rem; color: var(--fog-300); font-size: var(--step-1); }
+
+  .notebook {
+    margin-block: 2.5rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--ink-900);
+  }
+
+  .notebook-bar {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  .status { color: var(--fog-300); }
+  .status span { color: var(--gold); margin-inline-end: 0.5rem; }
+  iframe { display: block; width: 100%; border: 0; background: #18181b; }
+  .afterword p + p { margin-block-start: 1rem; }
+  .note { color: var(--fog-400); font-size: var(--step--1); }
+  .note a { display: inline-block; margin-inline-start: 0.25em; }
+  .back { display: inline-block; margin-block-start: 2rem; }
+
+  @media (max-width: 40rem) {
+    iframe { height: 1080px; }
+  }
+</style>
